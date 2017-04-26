@@ -263,3 +263,5 @@ export class CategoryListComponent{
 6. dodati u app.module.ts:
 import { CategoryListService } from "./categoryList/categoryList.service";
 providers: [ CategoryListService ],
+
+6 - In-memory mockanje
