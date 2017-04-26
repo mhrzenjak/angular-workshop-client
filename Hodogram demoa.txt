@@ -313,3 +313,70 @@ export class CategoryListComponent{
     }
 }
 3. ispričati unsubscripe priču
+
+
+7 - In memory mock
+1. kreirati testing folder unutar app foldera
+2. kreirati category-list-mock.service.ts i popuniti sa:
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+
+import { CategoryListModel } from "../category-list/category-list.model";
+import { CategoryListService } from "../category-list/category-list.service";
+
+@Injectable()
+export class CategoryListMockService implements CategoryListService {
+
+    getCategories(): Observable<Array<CategoryListModel>>{}
+}
+3. kreirati in-memory-data.service.ts u testing folderu i popuniti sa:
+import { InMemoryDbService } from 'angular-in-memory-web-api';
+
+import { CategoryListModel } from "../category-list/category-list.model";
+
+export class InMemoryDataService implements InMemoryDbService {
+    createDb() {
+        const categoryList: Array<CategoryListModel> = [
+            {text: "Rock", path: "rock"},
+            {text: "Punk", path: "punk"},
+            {text: "Pop", path: "pop"},
+            {text: "Techno", path: "techno"},
+            {text: "House", path: "house"},
+            {text: "Klasična glazba", path: "classical"},
+            {text: "Ostalo", path: "other"},
+            {text: "Najprodavanije", path: "top"},
+        ];
+		return { 
+            categories: categoryList
+          };
+    }
+}
+4. izmijeniti category-list-mock.service.ts u:
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
+
+import { CategoryListModel } from "../category-list/category-list.model";
+import { CategoryListService } from "../category-list/category-list.service";
+
+@Injectable()
+export class CategoryListMockService implements CategoryListService {
+    getCategoriesURL: string = 'api/categories';
+
+    constructor(private http: Http){}
+
+    getCategories(): Observable<Array<CategoryListModel>>{
+        return this.http.get(this.getCategoriesURL)
+        .map(response => response.json().data as Array<CategoryListModel>);
+    }
+}
+5. dodati u app.module.ts:
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { HttpModule } from '@angular/http';
+
+import { InMemoryDataService } from './testing/in-memory-data.service';
+
+  imports: [BrowserModule,
+    HttpModule,
+    InMemoryWebApiModule.forRoot(InMemoryDataService),
