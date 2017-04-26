@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { CategoryListModel } from "./categoryList.model";
+import { CategoryListModel } from "./category-list.model";
 
 @Component({
   selector: 'category-list',
-  templateUrl: './categoryList.component.html'
+  templateUrl: './category-list.component.html'
 })
 export class CategoryListComponent{
     categoryList: Array<CategoryListModel> = [

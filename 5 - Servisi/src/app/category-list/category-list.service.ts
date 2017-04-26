@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CategoryListModel } from "./categoryList.model";
+import { CategoryListModel } from "./category-list.model";
 
 @Injectable()
 export class CategoryListService {

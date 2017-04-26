@@ -79,19 +79,19 @@ styleUrls: ['./app.component.css']
 
 
 3 - Popis kategorija
-1. kreirati categoryList folder unutar app foldera
-2. kreirati datoteku categoryList.comonent.ts unutar tog foldera i popuniti je sa:
+1. kreirati category-list folder unutar app foldera
+2. kreirati datoteku category-list.comonent.ts unutar tog foldera i popuniti je sa:
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'categoryList',
-  templateUrl: './categoryList.component.html'
+  selector: 'category-list',
+  templateUrl: './category-list.component.html'
 })
 export class CategoryListComponent{
     
 }
-3. kreirati datoteku categoryList.component.html
-4. u categoryList.comonent.ts dodati:
+3. kreirati datoteku category-list.component.html
+4. u category-list.comonent.ts dodati:
 categoryList: Array<string> = [
 	"Rock",
 	"Punk",
@@ -101,9 +101,9 @@ categoryList: Array<string> = [
 	"Klasična glazba",
 	"Ostalo"
 ];
-5. u categoryList.comonent.html dodati:
+5. u category-list.comonent.html dodati:
 <ul class="nav flex-column">
-  <li class="nav-item" *ngFor="let category of categoryList"><a class="nav-link" href="#">{{category}}</a></li>
+  <li class="nav-item" *ngFor="let category of category-list"><a class="nav-link" href="#">{{category}}</a></li>
 </ul>
 6. u app.component.html zamijeniti:
 <h1>Side-bar</h1>
@@ -111,17 +111,17 @@ sa:
 <category-list></category-list>
 7. pokrenuti/pogledati aplikaciju i pokazati konzolu sa erorom
 8. u app.module.ts dodati:
-import { CategoryListComponent }  from './categoryList/categoryList.component';
+import { CategoryListComponent }  from './category-list/category-list.component';
 declarations: [ AppComponent, CategoryListComponent ],
 9. provjeriti aplikaciju i vidjeti da linkovi ne vode nikamo
-10. kreirati categoryList.model.ts i popuniti sa:
+10. kreirati category-list.model.ts i popuniti sa:
 export class CategoryListModel{
      text: string;
      path: string;
 }
-11. dodati u categoryList.component.ts:
-import { CategoryListModel } from "./categoryList.model";
-12. zamijeniti categoryList varijablu sa:
+11. dodati u category-list.component.ts:
+import { CategoryListModel } from "./category-list.model";
+12. zamijeniti category-list varijablu sa:
 categoryList: Array<CategoryListModel> = [
         {text: "Rock", path: "rock"},
         {text: "Punk", path: "punk"},
@@ -131,9 +131,9 @@ categoryList: Array<CategoryListModel> = [
         {text: "Klasična glazba", path: "classical"},
         {text: "Ostalo", path: "other"}
     ];
-13. promijeniti categoryList.component.html na:
+13. promijeniti category-list.component.html na:
 <ul class="nav flex-column">
-  <li class="nav-item" *ngFor="let category of categoryList"><a class="nav-link" [href]="category.path">{{category.text}}</a></li>
+  <li class="nav-item" *ngFor="let category of category-list"><a class="nav-link" [href]="category.path">{{category.text}}</a></li>
 </ul>
 14. pokazati da se url ne resolvea
 
@@ -180,9 +180,9 @@ import { RouterModule }   from '@angular/router';
 			<router-outlet></router-outlet>
 		</div>
 	</div>
-12. promijeniti categoryList.component.html u:
+12. promijeniti category-list.component.html u:
 <ul class="nav flex-column">
-  <li class="nav-item" *ngFor="let category of categoryList">
+  <li class="nav-item" *ngFor="let category of category-list">
     <a class="nav-link" [routerLink]="['/category', category.path]">{{category.text}}</a>
   </li>
 </ul>
@@ -210,15 +210,15 @@ ngOnInit(): void{
 
 
 5 - Servisi
-1. kreirati categoryList.service.ts i popuniti sa:
+1. kreirati category-list.service.ts i popuniti sa:
 import { Injectable } from '@angular/core';
-import { CategoryListModel } from "./categoryList.model";
+import { CategoryListModel } from "./category-list.model";
 
 @Injectable()
 export class CategoryListService {
 
 }
-2. preseliti iz categoryList.component.ts u categoryList.service.ts:
+2. preseliti iz category-list.component.ts u category-list.service.ts:
 categoryList: Array<CategoryListModel> = [
         {text: "Rock", path: "rock"},
         {text: "Punk", path: "punk"},
@@ -228,7 +228,7 @@ categoryList: Array<CategoryListModel> = [
         {text: "Klasična glazba", path: "classical"},
         {text: "Ostalo", path: "other"}
     ];
-3. preurediti categoryList.service.ts u:
+3. preurediti category-list.service.ts u:
 getCategories(): Array<CategoryListModel>{
         var categoryList: Array<CategoryListModel> = [
             {text: "Rock", path: "rock"},
@@ -239,16 +239,16 @@ getCategories(): Array<CategoryListModel>{
             {text: "Klasična glazba", path: "classical"},
             {text: "Ostalo", path: "other"}
         ];
-        return categoryList;
+        return category-list;
     }
-4. preurediti categoryList.component.ts u:
+4. preurediti category-list.component.ts u:
 import { Component, OnInit } from '@angular/core';
-import { CategoryListModel } from "./categoryList.model";
-import { CategoryListService } from "./categoryList.service";
+import { CategoryListModel } from "./category-list.model";
+import { CategoryListService } from "./category-list.service";
 
 @Component({
   selector: 'category-list',
-  templateUrl: './categoryList.component.html'
+  templateUrl: './category-list.component.html'
 })
 export class CategoryListComponent{
     categoryList: Array<CategoryListModel>;
@@ -261,7 +261,7 @@ export class CategoryListComponent{
 }
 5. pogledati aplikaciju, primjetiti error za nedostatak providera
 6. dodati u app.module.ts:
-import { CategoryListService } from "./categoryList/categoryList.service";
+import { CategoryListService } from "./category-list/category-list.service";
 providers: [ CategoryListService ],
 
 6 - In-memory mockanje
