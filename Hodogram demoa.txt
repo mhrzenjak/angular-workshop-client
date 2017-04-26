@@ -207,3 +207,59 @@ ngOnInit(): void{
 		}
 	);
 }
+
+
+5 - Servisi
+1. kreirati categoryList.service.ts i popuniti sa:
+import { Injectable } from '@angular/core';
+import { CategoryListModel } from "./categoryList.model";
+
+@Injectable()
+export class CategoryListService {
+
+}
+2. preseliti iz categoryList.component.ts u categoryList.service.ts:
+categoryList: Array<CategoryListModel> = [
+        {text: "Rock", path: "rock"},
+        {text: "Punk", path: "punk"},
+        {text: "Pop", path: "pop"},
+        {text: "Techno", path: "techno"},
+        {text: "House", path: "house"},
+        {text: "Klasična glazba", path: "classical"},
+        {text: "Ostalo", path: "other"}
+    ];
+3. preurediti categoryList.service.ts u:
+getCategories(): Array<CategoryListModel>{
+        var categoryList: Array<CategoryListModel> = [
+            {text: "Rock", path: "rock"},
+            {text: "Punk", path: "punk"},
+            {text: "Pop", path: "pop"},
+            {text: "Techno", path: "techno"},
+            {text: "House", path: "house"},
+            {text: "Klasična glazba", path: "classical"},
+            {text: "Ostalo", path: "other"}
+        ];
+        return categoryList;
+    }
+4. preurediti categoryList.component.ts u:
+import { Component, OnInit } from '@angular/core';
+import { CategoryListModel } from "./categoryList.model";
+import { CategoryListService } from "./categoryList.service";
+
+@Component({
+  selector: 'category-list',
+  templateUrl: './categoryList.component.html'
+})
+export class CategoryListComponent{
+    categoryList: Array<CategoryListModel>;
+
+    constructor(private categoryListService: CategoryListService){}
+
+    ngOnInit(): void{
+        this.categoryList = this.categoryListService.getCategories();
+    }
+}
+5. pogledati aplikaciju, primjetiti error za nedostatak providera
+6. dodati u app.module.ts:
+import { CategoryListService } from "./categoryList/categoryList.service";
+providers: [ CategoryListService ],
