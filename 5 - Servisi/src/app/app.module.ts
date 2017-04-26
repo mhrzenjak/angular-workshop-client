@@ -3,9 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { CategoryListComponent } from './categoryList/categoryList.component';
+import { CategoryListComponent } from './category-list/category-list.component';
 import { CategoryComponent } from './category/category.component';
-import { CategoryListService } from "./categoryList/categoryList.service";
+import { CategoryListService } from "./category-list/category-list.service";
 
 @NgModule({
   imports: [BrowserModule,

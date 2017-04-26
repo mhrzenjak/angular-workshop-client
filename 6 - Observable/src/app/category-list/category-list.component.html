@@ -1,0 +1,5 @@
+<ul class="nav flex-column">
+  <li class="nav-item" *ngFor="let category of categoryList">
+    <a class="nav-link" [routerLink]="['/category', category.path]" routerLinkActive="active">{{category.text}}</a>
+  </li>
+</ul>

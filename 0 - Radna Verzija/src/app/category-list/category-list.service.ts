@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
-import { CategoryListModel } from "./categoryList.model";
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+
+import { CategoryListModel } from "./category-list.model";
 
 @Injectable()
 export class CategoryListService {
 
-    getCategories(): Array<CategoryListModel>{
+    getCategories(): Observable<Array<CategoryListModel>>{
         var categoryList: Array<CategoryListModel> = [
             {text: "Rock", path: "rock"},
             {text: "Punk", path: "punk"},
@@ -14,6 +17,6 @@ export class CategoryListService {
             {text: "Klasična glazba", path: "classical"},
             {text: "Ostalo", path: "other"}
         ];
-        return categoryList;
+        return Observable.of(categoryList);
     }
 }
