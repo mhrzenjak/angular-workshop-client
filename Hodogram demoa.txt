@@ -1,0 +1,209 @@
+Radionica hodogram
+
+1 - Angular Seed
+1. instalacija VS Code
+2. instalacija nodejs
+3. instalacija git for windows
+4. otvaranje command prompta i navigiranje u željeni folder
+5. git clone https://github.com/angular/quickstart.git quickstart
+6. cd quickstart
+7. npm install
+8. code .
+9. npm start
+10. otvoriti u browser
+11. ctrl + c (prekinuti server)
+12. File -> Preferences -> Settings
+Dodati:
+    "files.exclude": {
+        "node_modules/": true,
+        "**/.git": true,
+		"**/.DS_Store": true,
+		"**/*.js.map": true,
+		"**/*.js": {"when": "$(basename).ts"}
+    }
+13. Extensions -> icons -> install -> reload
+14. File -> Preferences -> File Icon Theme
+
+
+2 - Aplikacijski modul
+1. npm install bootstrap@3
+2. u index.html dodati:
+<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+<script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+3. kreirati assets folder pod src
+4. kreirati images folder pod assets
+5. dodati sliku (banner) u assets folder
+6. dodati pod template u app.component.ts:
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12 banner">
+			<div class="text-center">
+				<img src="assets/images/banner.png" />
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-3 side-bar">
+			<h1>Side-bar</h1>
+		</div>
+		<div class="col-sm-9 content">
+			<h1>Content</h1>
+		</div>
+	</div>
+</div>
+7. pokrenuti aplikaciju i provjeriti konzolu (jquery error)
+8. kreirati js folder u assets folderu
+9. preuzeti jquery i staviti ga u js folder
+10. dodati u index.html prije bootstrap.js-a:
+<script src="assets/js/jquery-3.2.1.js"></script>
+11. ponovno provjeriti konzolu
+ZADATAK: dodati tether?
+12. izdvojiti html u app.component.html datoteku
+13. postaviti templateURL u app.component.ts:
+templateUrl: './app.component.html'
+14. kreirati app.component.css i dodati:
+.banner{
+    border-bottom: solid black 2px;
+}
+
+.side-bar{
+    border-right: solid black 2px;
+    border-bottom: solid black 2px;
+}
+
+.content{
+    border-bottom: solid black 2px;
+}
+15. u app.component.ts dodati:
+styleUrls: ['./app.component.css']
+
+
+3 - Popis kategorija
+1. kreirati categoryList folder unutar app foldera
+2. kreirati datoteku categoryList.comonent.ts unutar tog foldera i popuniti je sa:
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'categoryList',
+  templateUrl: './categoryList.component.html'
+})
+export class CategoryListComponent{
+    
+}
+3. kreirati datoteku categoryList.component.html
+4. u categoryList.comonent.ts dodati:
+categoryList: Array<string> = [
+	"Rock",
+	"Punk",
+	"Pop",
+	"Techno",
+	"House",
+	"Klasična glazba",
+	"Ostalo"
+];
+5. u categoryList.comonent.html dodati:
+<ul class="nav flex-column">
+  <li class="nav-item" *ngFor="let category of categoryList"><a class="nav-link" href="#">{{category}}</a></li>
+</ul>
+6. u app.component.html zamijeniti:
+<h1>Side-bar</h1>
+sa:
+<category-list></category-list>
+7. pokrenuti/pogledati aplikaciju i pokazati konzolu sa erorom
+8. u app.module.ts dodati:
+import { CategoryListComponent }  from './categoryList/categoryList.component';
+declarations: [ AppComponent, CategoryListComponent ],
+9. provjeriti aplikaciju i vidjeti da linkovi ne vode nikamo
+10. kreirati categoryList.model.ts i popuniti sa:
+export class CategoryListModel{
+     text: string;
+     path: string;
+}
+11. dodati u categoryList.component.ts:
+import { CategoryListModel } from "./categoryList.model";
+12. zamijeniti categoryList varijablu sa:
+categoryList: Array<CategoryListModel> = [
+        {text: "Rock", path: "rock"},
+        {text: "Punk", path: "punk"},
+        {text: "Pop", path: "pop"},
+        {text: "Techno", path: "techno"},
+        {text: "House", path: "house"},
+        {text: "Klasična glazba", path: "classical"},
+        {text: "Ostalo", path: "other"}
+    ];
+13. promijeniti categoryList.component.html na:
+<ul class="nav flex-column">
+  <li class="nav-item" *ngFor="let category of categoryList"><a class="nav-link" [href]="category.path">{{category.text}}</a></li>
+</ul>
+14. pokazati da se url ne resolvea
+
+
+4 - Routing
+1. kreirati folder category unutar app foldera
+2. kreirati datoteku category.component.ts
+3. kreirati datoteku category.component.html
+4. u category.component.ts dodati:
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'category',
+  templateUrl: './category.component.html'
+})
+export class CategoryComponent{
+    name: string;
+	
+	ngOnInit(): void{
+		this.name = "Odaberite kategoriju";
+	}
+}
+8. u category.component.html dodati:
+<h1>{{name}}</h1>
+9. dodati category u app.module.ts:
+import { CategoryComponent }  from './category/category.component';
+declarations: [ AppComponent, CategoryListComponent, CategoryComponent ],
+10. u app.module.ts dodati:
+import { RouterModule }   from '@angular/router';
+  imports:      [ BrowserModule,
+       RouterModule.forRoot([
+      {
+        path: 'category/:name',
+        component: CategoryComponent
+      }
+    ])
+   ],
+11. promijeniti app.component.html u:
+<div class="row">
+		<div class="col-sm-3 side-bar">
+			<category-list></category-list>
+		</div>
+		<div class="col-sm-9 content">
+			<router-outlet></router-outlet>
+		</div>
+	</div>
+12. promijeniti categoryList.component.html u:
+<ul class="nav flex-column">
+  <li class="nav-item" *ngFor="let category of categoryList">
+    <a class="nav-link" [routerLink]="['/category', category.path]">{{category.text}}</a>
+  </li>
+</ul>
+13. dodati u category.component.ts:
+import { ActivatedRoute, Params }   from '@angular/router';
+
+constructor(private route: ActivatedRoute){}
+
+ngOnInit(): void{
+	var category = this;
+	this.route.params.subscribe(
+		function (params: Params) {
+			category.name = params["name"];
+		}
+	);
+}
+14. promijeniti u category.component.ts:
+ngOnInit(): void{
+	this.route.params.subscribe(
+		params => {
+			this.name = params["name"];
+		}
+	);
+}
