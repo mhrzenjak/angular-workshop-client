@@ -1,5 +1,7 @@
 Radionica hodogram
 
+/*******************************************************************\
+\*******************************************************************/
 1 - Angular Seed
 1. instalacija VS Code
 2. instalacija nodejs
@@ -24,63 +26,159 @@ Dodati:
 13. Extensions -> icons -> install -> reload
 14. File -> Preferences -> File Icon Theme
 
+/*******************************************************************\
+\*******************************************************************/
+2 - Aplikacijski modul i Layout
+1. npm install bootstrap@3 --save
+2. index.html preurediti u:
+<!DOCTYPE html>
+<html>
 
-2 - Aplikacijski modul
-1. npm install bootstrap@3
-2. u index.html dodati:
-<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+<head>
+  <title>Angular Webshop</title>
+  <base href="/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Polyfill(s) for older browsers -->
+  <script src="node_modules/core-js/client/shim.min.js"></script>
+  <script src="node_modules/zone.js/dist/zone.js"></script>
+  <script src="node_modules/systemjs/dist/system.src.js"></script>
+  <script src="systemjs.config.js"></script>
+
+  <script>
+    System.import('main.js').catch(function (err) { console.error(err); });
+  </script>
+</head>
+
+<body>
+  <my-app>Loading AppComponent content here ...</my-app>
+</body>
+
 <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+
+</html>
 3. kreirati assets folder pod src
 4. kreirati images folder pod assets
-5. dodati sliku (banner) u assets folder
-6. dodati pod template u app.component.ts:
-<div class="container-fluid">
+5. dodati sliku (banner.png) u assets folder
+6. preuzeti template sa http://getbootstrap.com/examples/offcanvas/ i kopirati ga u app.component.ts
+7. preurediti app.component.ts u:
+<nav class="navbar navbar-fixed-top navbar-inverse">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+			 aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+			<a class="navbar-brand" href="#">Angular Webshop</a>
+		</div>
+		<div id="navbar" class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="#">Home</a></li>
+				<li><a href="#about">About</a></li>
+				<li><a href="#contact">Contact</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+<div class="container">
 	<div class="row">
-		<div class="col-sm-12 banner">
-			<div class="text-center">
-				<img src="assets/images/banner.png" />
+		<div class="col-xs-12 col-sm-3" id="sidebar">
+			<div class="list-group">
+				<a href="#" class="list-group-item active">Link</a>
+				<a href="#" class="list-group-item">Link</a>
+				<a href="#" class="list-group-item">Link</a>
+				<a href="#" class="list-group-item">Link</a>
+				<a href="#" class="list-group-item">Link</a>
+				<a href="#" class="list-group-item">Link</a>
+				<a href="#" class="list-group-item">Link</a>
+				<a href="#" class="list-group-item">Link</a>
+				<a href="#" class="list-group-item">Link</a>
+				<a href="#" class="list-group-item">Link</a>
+			</div>
+		</div>
+
+		<div class="col-xs-12 col-sm-9" id="content">
+			<div class="jumbotron">
+				<img src="assets/images/banner.png" class="img-responsive"/>
+				<p>This is an example to show the potential of an offcanvas layout pattern in Bootstrap. Try some responsive-range viewport
+					sizes to see it in action.</p>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-lg-4">
+					<h2>Heading</h2>
+					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
+						nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+						</p>
+					<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+				</div>
+				<div class="col-xs-12 col-lg-4">
+					<h2>Heading</h2>
+					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
+						nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+						</p>
+					<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+				</div>
+				<div class="col-xs-12 col-lg-4">
+					<h2>Heading</h2>
+					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
+						nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+						</p>
+					<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+				</div>
 			</div>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-sm-3 side-bar">
-			<h1>Side-bar</h1>
-		</div>
-		<div class="col-sm-9 content">
-			<h1>Content</h1>
-		</div>
-	</div>
+
+	<hr>
+
+	<footer>
+		<p>&copy; 2016 Company, Inc.</p>
+	</footer>
 </div>
-7. pokrenuti aplikaciju i provjeriti konzolu (jquery error)
-8. kreirati js folder u assets folderu
-9. preuzeti jquery i staviti ga u js folder
-10. dodati u index.html prije bootstrap.js-a:
+8. kopirati u styles.css iz view-source:http://getbootstrap.com/examples/offcanvas/offcanvas.css:
+html,
+body {
+  overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+body {
+  padding-top: 70px;
+}
+footer {
+  padding: 30px 0;
+}
+9. kreirati css folder pod assets folderom
+10. premjestiti styles.css u css folder
+11. promijeniti index.html:
+<link rel="stylesheet" href="assets/css/styles.css">
+12. pokrenuti aplikaciju i provjeriti konzolu (jquery error)
+13. kreirati js folder u assets folderu
+14. preuzeti jquery i staviti ga u js folder
+15. dodati u index.html prije bootstrap.js-a:
 <script src="assets/js/jquery-3.2.1.js"></script>
-11. ponovno provjeriti konzolu
-ZADATAK: dodati tether?
-12. izdvojiti html u app.component.html datoteku
-13. postaviti templateURL u app.component.ts:
+16. ponovno provjeriti konzolu
+17. izdvojiti html u app.component.html datoteku
+18. postaviti templateURL u app.component.ts:
 templateUrl: './app.component.html'
-14. kreirati app.component.css i dodati:
-.banner{
-    border-bottom: solid black 2px;
-}
-
-.side-bar{
-    border-right: solid black 2px;
-    border-bottom: solid black 2px;
-}
-
-.content{
-    border-bottom: solid black 2px;
+19. kreirati app.component.css i dodati:
+h2{
+    color: cornflowerblue;
 }
 15. u app.component.ts dodati:
 styleUrls: ['./app.component.css']
 
-
+/*******************************************************************\
+\*******************************************************************/
 3 - Popis kategorija
-1. kreirati category-list folder unutar app foldera
-2. kreirati datoteku category-list.comonent.ts unutar tog foldera i popuniti je sa:
+1. kreitati folder categories unutar app foldera
+2. kreirati category-list folder unutar categories foldera
+3. kreirati datoteku category-list.comonent.ts unutar tog foldera i popuniti je sa:
 import { Component } from '@angular/core';
 
 @Component({
@@ -90,7 +188,6 @@ import { Component } from '@angular/core';
 export class CategoryListComponent{
     
 }
-3. kreirati datoteku category-list.component.html
 4. u category-list.comonent.ts dodati:
 categoryList: Array<string> = [
 	"Rock",
@@ -101,45 +198,41 @@ categoryList: Array<string> = [
 	"Klasična glazba",
 	"Ostalo"
 ];
-5. u category-list.comonent.html dodati:
-<ul class="nav flex-column">
-  <li class="nav-item" *ngFor="let category of category-list"><a class="nav-link" href="#">{{category}}</a></li>
-</ul>
-6. u app.component.html zamijeniti:
-<h1>Side-bar</h1>
-sa:
+5. kreirati datoteku category-list.component.html
+6. u category-list.comonent.html dodati:
+<a href="#" class="list-group-item" *ngFor="let category of categoryList">{{category}}</a>
+7. u app.component.html zamijeniti statične linkove u sidebaru sa:
 <category-list></category-list>
-7. pokrenuti/pogledati aplikaciju i pokazati konzolu sa erorom
-8. u app.module.ts dodati:
-import { CategoryListComponent }  from './category-list/category-list.component';
+8. pokrenuti/pogledati aplikaciju i pokazati konzolu sa erorom
+9. u app.module.ts dodati:
+import { CategoryListComponent }  from './categories/category-list/category-list.component';
 declarations: [ AppComponent, CategoryListComponent ],
-9. provjeriti aplikaciju i vidjeti da linkovi ne vode nikamo
-10. kreirati category-list.model.ts i popuniti sa:
+10. provjeriti aplikaciju i vidjeti da linkovi ne vode nikamo
+11. kreirati category-list.model.ts i popuniti sa:
 export class CategoryListModel{
+     id: number;
      text: string;
-     path: string;
 }
-11. dodati u category-list.component.ts:
+12. dodati u category-list.component.ts:
 import { CategoryListModel } from "./category-list.model";
-12. zamijeniti category-list varijablu sa:
+13. zamijeniti category-list varijablu sa:
 categoryList: Array<CategoryListModel> = [
-        {text: "Rock", path: "rock"},
-        {text: "Punk", path: "punk"},
-        {text: "Pop", path: "pop"},
-        {text: "Techno", path: "techno"},
-        {text: "House", path: "house"},
-        {text: "Klasična glazba", path: "classical"},
-        {text: "Ostalo", path: "other"}
+        {id: 1, text: "Rock"},
+        {id: 2, text: "Punk"},
+        {id: 3, text: "Pop"},
+        {id: 4, text: "Techno"},
+        {id: 5, text: "House"},
+        {id: 6, text: "Klasična glazba"},
+        {id: 7, text: "Ostalo"}
     ];
-13. promijeniti category-list.component.html na:
-<ul class="nav flex-column">
-  <li class="nav-item" *ngFor="let category of category-list"><a class="nav-link" [href]="category.path">{{category.text}}</a></li>
-</ul>
-14. pokazati da se url ne resolvea
+14. promijeniti category-list.component.html na:
+<a [href]="category.id" class="list-group-item" *ngFor="let category of categoryList">{{category.text}}</a>
+15. pokazati da se url ne resolvea
 
-
+/*******************************************************************\
+\*******************************************************************/
 4 - Routing
-1. kreirati folder category unutar app foldera
+1. kreirati folder category unutar categories foldera
 2. kreirati datoteku category.component.ts
 3. kreirati datoteku category.component.html
 4. u category.component.ts dodati:
@@ -156,37 +249,59 @@ export class CategoryComponent{
 		this.name = "Odaberite kategoriju";
 	}
 }
-8. u category.component.html dodati:
-<h1>{{name}}</h1>
-9. dodati category u app.module.ts:
-import { CategoryComponent }  from './category/category.component';
+5. u category.component.html dodati:
+<div class="col-xs-12">
+    <h1>{{name}}</h1>
+</div>
+6. u category.component.html premjestiti iz app.component.html:
+<div class="col-xs-12 col-lg-4">
+    <h2>Heading</h2>
+    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
+        nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+    </p>
+    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+</div>
+<div class="col-xs-12 col-lg-4">
+    <h2>Heading</h2>
+    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
+        nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+    </p>
+    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+</div>
+<div class="col-xs-12 col-lg-4">
+    <h2>Heading</h2>
+    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
+        nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+    </p>
+    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+</div>
+7. dodati category u app.module.ts:
+import { CategoryComponent }  from './categories/category/category.component';
 declarations: [ AppComponent, CategoryListComponent, CategoryComponent ],
-10. u app.module.ts dodati:
+8. u app.module.ts dodati:
 import { RouterModule }   from '@angular/router';
   imports:      [ BrowserModule,
        RouterModule.forRoot([
       {
-        path: 'category/:name',
+        path: 'category/:id',
         component: CategoryComponent
       }
     ])
    ],
-11. promijeniti app.component.html u:
-<div class="row">
-		<div class="col-sm-3 side-bar">
-			<category-list></category-list>
+9. promijeniti content dio app.component.html u:
+<div class="col-xs-12 col-sm-9" id="content">
+			<div class="jumbotron">
+				<img src="assets/images/banner.png" class="img-responsive"/>
+				<p>This is an example to show the potential of an offcanvas layout pattern in Bootstrap. Try some responsive-range viewport
+					sizes to see it in action.</p>
+			</div>
+			<div class="row">
+				<router-outlet></router-outlet>
+			</div>
 		</div>
-		<div class="col-sm-9 content">
-			<router-outlet></router-outlet>
-		</div>
-	</div>
-12. promijeniti category-list.component.html u:
-<ul class="nav flex-column">
-  <li class="nav-item" *ngFor="let category of category-list">
-    <a class="nav-link" [routerLink]="['/category', category.path]">{{category.text}}</a>
-  </li>
-</ul>
-13. dodati u category.component.ts:
+10. promijeniti category-list.component.html u:
+<a class="list-group-item" *ngFor="let category of categoryList" [routerLink]="['/category', category.id]">{{category.text}}</a>
+11. dodati u category.component.ts:
 import { ActivatedRoute, Params }   from '@angular/router';
 
 constructor(private route: ActivatedRoute){}
@@ -195,56 +310,58 @@ ngOnInit(): void{
 	var category = this;
 	this.route.params.subscribe(
 		function (params: Params) {
-			category.name = params["name"];
+			category.name = params["id"];
 		}
 	);
 }
-14. promijeniti u category.component.ts:
+12. promijeniti u category.component.ts:
 ngOnInit(): void{
 	this.route.params.subscribe(
 		params => {
-			this.name = params["name"];
+			this.name = params["id"];
 		}
 	);
 }
 
-
+/*******************************************************************\
+\*******************************************************************/
 5 - Servisi
-1. kreirati category-list.service.ts i popuniti sa:
+1. kreirati shared folder pod categories
+2. kreirati category.service.ts u shared folderu i popuniti sa:
 import { Injectable } from '@angular/core';
-import { CategoryListModel } from "./category-list.model";
+import { CategoryListModel } from "../category-list/category-list.model";
 
 @Injectable()
-export class CategoryListService {
+export class CategoryService {
 
 }
-2. preseliti iz category-list.component.ts u category-list.service.ts:
+2. preseliti iz category-list.component.ts u category.service.ts:
 categoryList: Array<CategoryListModel> = [
-        {text: "Rock", path: "rock"},
-        {text: "Punk", path: "punk"},
-        {text: "Pop", path: "pop"},
-        {text: "Techno", path: "techno"},
-        {text: "House", path: "house"},
-        {text: "Klasična glazba", path: "classical"},
-        {text: "Ostalo", path: "other"}
+        {id: 1, text: "Rock"},
+        {id: 2, text: "Punk"},
+        {id: 3, text: "Pop"},
+        {id: 4, text: "Techno"},
+        {id: 5, text: "House"},
+        {id: 6, text: "Klasična glazba"},
+        {id: 7, text: "Ostalo"}
     ];
 3. preurediti category-list.service.ts u:
 getCategories(): Array<CategoryListModel>{
         var categoryList: Array<CategoryListModel> = [
-            {text: "Rock", path: "rock"},
-            {text: "Punk", path: "punk"},
-            {text: "Pop", path: "pop"},
-            {text: "Techno", path: "techno"},
-            {text: "House", path: "house"},
-            {text: "Klasična glazba", path: "classical"},
-            {text: "Ostalo", path: "other"}
+            {id: 1, text: "Rock"},
+			{id: 2, text: "Punk"},
+			{id: 3, text: "Pop"},
+			{id: 4, text: "Techno"},
+			{id: 5, text: "House"},
+			{id: 6, text: "Klasična glazba"},
+			{id: 7, text: "Ostalo"}
         ];
-        return category-list;
+        return categoryList;
     }
 4. preurediti category-list.component.ts u:
 import { Component, OnInit } from '@angular/core';
 import { CategoryListModel } from "./category-list.model";
-import { CategoryListService } from "./category-list.service";
+import { CategoryService } from "../shared/category.service";
 
 @Component({
   selector: 'category-list',
@@ -253,37 +370,39 @@ import { CategoryListService } from "./category-list.service";
 export class CategoryListComponent{
     categoryList: Array<CategoryListModel>;
 
-    constructor(private categoryListService: CategoryListService){}
+    constructor(private categoryService: CategoryService){}
 
     ngOnInit(): void{
-        this.categoryList = this.categoryListService.getCategories();
+        this.categoryList = this.categoryService.getCategories();
     }
 }
 5. pogledati aplikaciju, primjetiti error za nedostatak providera
 6. dodati u app.module.ts:
-import { CategoryListService } from "./category-list/category-list.service";
-providers: [ CategoryListService ],
+import { CategoryService } from "./categories/shared/category.service";
+providers: [ CategoryService ],
 
+/*******************************************************************\
+\*******************************************************************/
 6 - Observable
-1. preurediti category-list.service.ts u:
+1. preurediti category.service.ts u:
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
-import { CategoryListModel } from "./category-list.model";
+import { CategoryListModel } from "../category-list/category-list.model";
 
 @Injectable()
-export class CategoryListService {
+export class CategoryService {
 
     getCategories(): Observable<Array<CategoryListModel>>{
         var categoryList: Array<CategoryListModel> = [
-            {text: "Rock", path: "rock"},
-            {text: "Punk", path: "punk"},
-            {text: "Pop", path: "pop"},
-            {text: "Techno", path: "techno"},
-            {text: "House", path: "house"},
-            {text: "Klasična glazba", path: "classical"},
-            {text: "Ostalo", path: "other"}
+            { id: 1, text: "Rock" },
+            { id: 2, text: "Punk" },
+            { id: 3, text: "Pop" },
+            { id: 4, text: "Techno" },
+            { id: 5, text: "House" },
+            { id: 6, text: "Klasična glazba" },
+            { id: 7, text: "Ostalo" }
         ];
         return Observable.of(categoryList);
     }
@@ -291,7 +410,7 @@ export class CategoryListService {
 2. izmjeniti category-list.component.ts u:
 import { Component, OnInit } from '@angular/core';
 import { CategoryListModel } from "./category-list.model";
-import { CategoryListService } from "./category-list.service";
+import { CategoryService } from "./shared/category.service";
 
 @Component({
   selector: 'category-list',
@@ -300,10 +419,10 @@ import { CategoryListService } from "./category-list.service";
 export class CategoryListComponent{
     categoryList: Array<CategoryListModel>;
 
-    constructor(private categoryListService: CategoryListService){}
+    constructor(private categoryService: CategoryService){}
 
     ngOnInit(): void{
-        this.categoryListService.getCategories()
+        this.categoryService.getCategories()
         .subscribe(value => {
             this.categoryList = value;
         },
@@ -314,54 +433,55 @@ export class CategoryListComponent{
 }
 3. ispričati unsubscripe priču
 
-
+/*******************************************************************\
+\*******************************************************************/
 7 - In memory mock
 1. kreirati testing folder unutar app foldera
-2. kreirati category-list-mock.service.ts i popuniti sa:
+2. kreirati category-mock.service.ts i popuniti sa:
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { CategoryListModel } from "../category-list/category-list.model";
-import { CategoryListService } from "../category-list/category-list.service";
+import { CategoryListModel } from "../categories/category-list/category-list.model";
+import { CategoryService } from "../categories/shared/category.service";
 
 @Injectable()
-export class CategoryListMockService implements CategoryListService {
+export class CategoryMockService implements CategoryService {
 
     getCategories(): Observable<Array<CategoryListModel>>{}
 }
 3. kreirati in-memory-data.service.ts u testing folderu i popuniti sa:
 import { InMemoryDbService } from 'angular-in-memory-web-api';
 
-import { CategoryListModel } from "../category-list/category-list.model";
+import { CategoryListModel } from "../categories/category-list/category-list.model";
 
 export class InMemoryDataService implements InMemoryDbService {
     createDb() {
         const categoryList: Array<CategoryListModel> = [
-            {text: "Rock", path: "rock"},
-            {text: "Punk", path: "punk"},
-            {text: "Pop", path: "pop"},
-            {text: "Techno", path: "techno"},
-            {text: "House", path: "house"},
-            {text: "Klasična glazba", path: "classical"},
-            {text: "Ostalo", path: "other"},
-            {text: "Najprodavanije", path: "top"},
+            { id: 1, text: "Rock" },
+            { id: 2, text: "Punk" },
+            { id: 3, text: "Pop" },
+            { id: 4, text: "Techno" },
+            { id: 5, text: "House" },
+            { id: 6, text: "Klasična glazba" },
+            { id: 7, text: "Ostalo" },
+			{ id: 8, text: "Najprodavanije" }
         ];
 		return { 
             categories: categoryList
           };
     }
 }
-4. izmijeniti category-list-mock.service.ts u:
+4. izmijeniti category-mock.service.ts u:
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 import { CategoryListModel } from "../category-list/category-list.model";
-import { CategoryListService } from "../category-list/category-list.service";
+import { CategoryService } from "../category-list/category-list.service";
 
 @Injectable()
-export class CategoryListMockService implements CategoryListService {
+export class CategoryMockService implements CategoryService {
     getCategoriesURL: string = 'api/categories';
 
     constructor(private http: Http){}
@@ -376,7 +496,10 @@ import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { HttpModule } from '@angular/http';
 
 import { InMemoryDataService } from './testing/in-memory-data.service';
+import { CategoryMockService } from "./testing/category-mock.service";
 
   imports: [BrowserModule,
     HttpModule,
     InMemoryWebApiModule.forRoot(InMemoryDataService),
+	
+  providers: [{ provide: CategoryService, useClass: CategoryMockService }],

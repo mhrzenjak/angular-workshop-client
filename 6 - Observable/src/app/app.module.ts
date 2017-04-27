@@ -3,20 +3,20 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { CategoryListComponent } from './category-list/category-list.component';
-import { CategoryComponent } from './category/category.component';
-import { CategoryListService } from "./category-list/category-list.service";
+import { CategoryListComponent } from './categories/category-list/category-list.component';
+import { CategoryComponent } from './categories/category/category.component';
+import { CategoryService } from "./categories/shared/category.service";
 
 @NgModule({
   imports: [BrowserModule,
     RouterModule.forRoot([
       {
-        path: 'category/:name',
+        path: 'category/:id',
         component: CategoryComponent
       }
     ])
   ],
-  providers: [CategoryListService],
+  providers: [ CategoryService ],
   declarations: [AppComponent, CategoryListComponent, CategoryComponent],
   bootstrap: [AppComponent]
 })
