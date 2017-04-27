@@ -3,11 +3,12 @@ import { Observable } from 'rxjs/Observable';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-import { CategoryListModel } from "../category-list/category-list.model";
-import { CategoryListService } from "../category-list/category-list.service";
+import { CategoryListModel } from "../categories/category-list/category-list.model";
+import { CategoryService } from "../categories/shared/category.service";
 
 @Injectable()
-export class CategoryListMockService implements CategoryListService {
+export class CategoryMockService implements CategoryService {
+
     getCategoriesURL: string = 'api/categories';
 
     constructor(private http: Http){}
