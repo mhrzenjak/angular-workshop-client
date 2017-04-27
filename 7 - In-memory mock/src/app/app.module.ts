@@ -5,12 +5,12 @@ import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { CategoryListComponent } from './category-list/category-list.component';
-import { CategoryComponent } from './category/category.component';
-import { CategoryListService } from "./category-list/category-list.service";
+import { CategoryListComponent } from './categories/category-list/category-list.component';
+import { CategoryComponent } from './categories/category/category.component';
+import { CategoryService } from "./categories/shared/category.service";
 
 import { InMemoryDataService } from './testing/in-memory-data.service';
-import { CategoryListMockService } from "./testing/category-list-mock.service";
+import { CategoryMockService } from "./testing/category-mock.service";
 
 @NgModule({
   imports: [BrowserModule,
@@ -18,12 +18,12 @@ import { CategoryListMockService } from "./testing/category-list-mock.service";
     InMemoryWebApiModule.forRoot(InMemoryDataService),
     RouterModule.forRoot([
       {
-        path: 'category/:name',
+        path: 'category/:id',
         component: CategoryComponent
       }
     ])
   ],
-  providers: [{ provide: CategoryListService, useClass: CategoryListMockService }],
+  providers: [{ provide: CategoryService, useClass: CategoryMockService }],
   declarations: [AppComponent, CategoryListComponent, CategoryComponent],
   bootstrap: [AppComponent]
 })

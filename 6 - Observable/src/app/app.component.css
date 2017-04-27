@@ -1,12 +1,3 @@
-.banner{
-    border-bottom: solid black 2px;
-}
-
-.side-bar{
-    border-right: solid black 2px;
-    border-bottom: solid black 2px;
-}
-
-.content{
-    border-bottom: solid black 2px;
+h2{
+    color: cornflowerblue;
 }
