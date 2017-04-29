@@ -653,7 +653,7 @@ const productClassicalList: Array<ProductSummaryModel> = [
 </div>
 
 /*******************************************************************\
-8 - Detalji produkta
+9 - Detalji produkta
 \*******************************************************************/
 1. kreirati folder product u products folderu
 2. kreirati product.component.ts, product.component.html i product.model.ts
@@ -856,7 +856,86 @@ export class ProductComponent {
     }
 }
 
+/*******************************************************************\
+10 - Dvosmjerni servisi i direktive
+\*******************************************************************/
+1. dodati u category.service.ts:
+import { Subject }    from 'rxjs/Subject';
 
+currentCategoryName: Subject<string>;
+    currentCategoryNameChanged: Observable<string>;
+	
+	setCurrentCategoryName(name: string){}
+2. dodati u category-mock.service.ts:
+import { Subject }    from 'rxjs/Subject';
+
+currentCategoryName: Subject<string> = new Subject<string>();
+    currentCategoryNameChanged: Observable<string> = this.currentCategoryName.asObservable();
+
+	setCurrentCategoryName(name: string){
+        this.currentCategoryName.next(name);
+    }
+3. dodati u category-list.component.ts:
+onCategoryChanged(name: string){
+        this.categoryService.setCurrentCategoryName(name);
+    }
+4. dodati u category-list.component.html:
+(click)="onCategoryChanged(category.text)"
+5. category.component.ts preurediti u:
+    ngOnInit(): void {
+        this.route.params.subscribe(
+            params => {
+                this.id = params["id"];
+                this.getCategory(this.id);
+            }
+        );
+
+        this.categoryService.currentCategoryNameChanged.subscribe(
+            value => {
+                this.name = value;
+            }
+        )
+    }
+6. pokrenuti aplikaciju i pokazati dohvat imena; primjetiti da ručni upis linka ne postavlja ime; pitati kako riješiti problem
+7. kreirati shared folder unutar app foldera
+8. kreirati rotate-on-hover folder unutar shared foldera
+9. u rotate-on-hover folder dodati rotate-on-hover.directive.ts i popuniti sa:
+import { Directive, HostListener, Renderer2, ElementRef } from '@angular/core';
+
+@Directive({
+    selector: "img[rotateOnHover]"
+})
+export class RotateOnHoverDirective{
+
+    constructor(
+        private renderer: Renderer2,
+        private el: ElementRef
+    ){}
+
+    @HostListener("mouseenter") onMouseEnter() {
+        this.hover(true);
+        console.log("true");
+    }
+
+    @HostListener("mouseleave") onMouseLeave() {
+        this.hover(false);
+    }
+
+    hover(shouldRotate: boolean){
+        if(shouldRotate){
+            this.renderer.addClass(this.el.nativeElement, "spin");
+        } 
+        else {
+            this.renderer.removeClass(this.el.nativeElement, "spin");
+        }
+    }
+}
+10. u app.module.ts dodati:
+import { RotateOnHoverDirective } from "./shared/rotate-on-hover/rotate-on-hover.directive";
+
+declarations: [AppComponent, CategoryListComponent, CategoryComponent, ProductSummaryComponent, ProductComponent, RotateOnHoverDirective],
+11. u product-summary.component.ts dodati:
+<img rotateOnHover src="assets/images/record.png">
 
 //dodati direktivu za duration
 //dodati bi-directional service za 
