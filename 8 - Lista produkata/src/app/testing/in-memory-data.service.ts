@@ -23,10 +23,10 @@ export class InMemoryDataService implements InMemoryDbService {
         ];
 
         const productClassicalList: Array<ProductSummaryModel> = [
-            { id: 1, name: "Dance of the Knights - Prokofiev", description: "Klasik.", price: 1.23 },
-            { id: 2, name: "Claire de Lune - Claude Debussy", description: "Klasik.", price: 2.34 },
-            { id: 3, name: "O Fortuna - Carl Orff", description: "Klasik.", price: 3.34 },
-            { id: 4, name: "Ride of the Valkyries - Richard Wagner", description: "Klasik.", price: 3.44 },
+            { id: 4, name: "Dance of the Knights - Prokofiev", description: "Klasik.", price: 1.23 },
+            { id: 5, name: "Claire de Lune - Claude Debussy", description: "Klasik.", price: 2.34 },
+            { id: 6, name: "O Fortuna - Carl Orff", description: "Klasik.", price: 3.34 },
+            { id: 7, name: "Ride of the Valkyries - Richard Wagner", description: "Klasik.", price: 3.44 },
         ];
 
         return {
