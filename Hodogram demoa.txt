@@ -937,5 +937,71 @@ declarations: [AppComponent, CategoryListComponent, CategoryComponent, ProductSu
 11. u product-summary.component.ts dodati:
 <img rotateOnHover src="assets/images/record.png">
 
-//dodati direktivu za duration
-//dodati bi-directional service za 
+/*******************************************************************\
+11 - Spajanje s Web-API
+\*******************************************************************/
+1. pokrenuti web-api server
+2. preurediti category.service.ts u:
+import 'rxjs/add/operator/map';
+
+    currentCategoryName: Subject<string> = new Subject<string>();
+    currentCategoryNameChanged: Observable<string> = this.currentCategoryName.asObservable();
+
+    categoriesBaseURL: string = "http://localhost:63286/";
+    getCategoriesURL: string = this.categoriesBaseURL +  "api/categories/get-all-categories";
+    getCategoryURL: string = this.categoriesBaseURL +  "api/categories/get-products/";
+
+    constructor(private http: Http){}
+
+    getCategories(): Observable<Array<CategoryListModel>>{
+        return this.http.get(this.getCategoriesURL)
+        .map(response => response.json() as Array<CategoryListModel>);      
+    }
+
+    getCategory(id: number): Observable<Array<ProductSummaryModel>>{
+        return this.http.get(this.getCategoryURL + id)
+        .map(response => response.json() as Array<ProductSummaryModel>);
+    }
+
+    setCurrentCategoryName(name: string){
+        this.currentCategoryName.next(name);
+    }
+3. izmjeniti u app.module.ts:
+//import { CategoryMockService } from "./testing/category-mock.service";
+
+    //InMemoryWebApiModule.forRoot(InMemoryDataService),
+	
+    { provide: CategoryService, useClass: CategoryService },
+4. iskomentirati cijeli category-mock.service.ts i objasniti problem private varijabli kod mixina
+5. pokrenuti aplikaciju, primjetiti CORS error
+6. u web api projektu omogućiti cors
+7. provjeriti aplikaciju, uočiti učitavanje kategorija
+8. preurediti product.service.ts u:
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Http } from "@angular/http";
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/map';
+
+import { ProductModel } from "../product/product.model";
+
+@Injectable()
+export class ProductService {
+
+    getProductURL: string = 'http://localhost:63286/api/products/';
+
+    constructor(private http: Http){}
+
+    getProduct(id: number): Observable<ProductModel>{
+        return this.http.get(this.getProductURL + id)
+        .map(response => response.json() as ProductModel);
+    }
+}
+9. iskomentirati product-mock.service.ts
+10. izmjeniti app.module.ts:
+//import { ProductMockService } from "./testing/product-mock.service";
+
+  providers: [
+    { provide: CategoryService, useClass: CategoryService },
+    { provide: ProductService, useClass: ProductService }
+  ],

@@ -1,0 +1,1 @@
+<a class="list-group-item" *ngFor="let category of categoryList" [routerLink]="['/category', category.id]" routerLinkActive="active" (click)="onCategoryChanged(category.text)">{{category.text}}</a>
