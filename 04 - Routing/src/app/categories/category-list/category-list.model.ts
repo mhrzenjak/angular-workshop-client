@@ -1,4 +1,4 @@
 export class CategoryListModel{
      id: number;
-     text: string;
+     name: string;
 }

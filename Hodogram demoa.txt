@@ -40,31 +40,40 @@ Dodati:
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
-  <link rel="stylesheet" href="styles.css">
-
-  <!-- Polyfill(s) for older browsers -->
-  <script src="node_modules/core-js/client/shim.min.js"></script>
-  <script src="node_modules/zone.js/dist/zone.js"></script>
-  <script src="node_modules/systemjs/dist/system.src.js"></script>
-  <script src="systemjs.config.js"></script>
-
-  <script>
-    System.import('main.js').catch(function (err) { console.error(err); });
-  </script>
+  <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body>
-  <my-app>Loading AppComponent content here ...</my-app>
+  <webshop-app>Loading AppComponent content here ...</webshop-app>
 </body>
 
+<script src="assets/js/jquery-3.2.1.js"></script>
 <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
 
+<script src="node_modules/core-js/client/shim.min.js"></script>
+<script src="node_modules/zone.js/dist/zone.js"></script>
+<script src="node_modules/systemjs/dist/system.src.js"></script>
+<script src="systemjs.config.js"></script>
+
+<script>
+  System.import('main.js').catch(function (err) { console.error(err); });
+</script>
+
 </html>
-3. kreirati assets folder pod src
-4. kreirati images folder pod assets
-5. dodati sliku (banner.png) u assets folder
-6. preuzeti template sa http://getbootstrap.com/examples/offcanvas/ i kopirati ga u app.component.ts
-7. preurediti app.component.ts u:
+3. preurediti app.component.ts u:
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'webshop-app',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent  { }
+4. kreirati assets folder pod src
+5. kreirati images folder pod assets
+6. dodati sliku (banner.png) u assets folder
+7. preuzeti template sa http://getbootstrap.com/examples/offcanvas/ i kopirati ga u app.component.html
+8. preurediti app.component.html u:
 <nav class="navbar navbar-fixed-top navbar-inverse">
 	<div class="container">
 		<div class="navbar-header">
@@ -142,7 +151,7 @@ Dodati:
 		<p>&copy; 2016 Company, Inc.</p>
 	</footer>
 </div>
-8. kopirati u styles.css iz view-source:http://getbootstrap.com/examples/offcanvas/offcanvas.css:
+9. kopirati u styles.css iz view-source http://getbootstrap.com/examples/offcanvas/offcanvas.css:
 html,
 body {
   overflow-x: hidden; /* Prevent scroll on narrow devices */
@@ -153,24 +162,24 @@ body {
 footer {
   padding: 30px 0;
 }
-9. kreirati css folder pod assets folderom
-10. premjestiti styles.css u css folder
-11. promijeniti index.html:
+10. kreirati css folder pod assets folderom
+11. premjestiti styles.css u css folder
+12. promijeniti index.html:
 <link rel="stylesheet" href="assets/css/styles.css">
-12. pokrenuti aplikaciju i provjeriti konzolu (jquery error)
-13. kreirati js folder u assets folderu
-14. preuzeti jquery i staviti ga u js folder
-15. dodati u index.html prije bootstrap.js-a:
+13. pokrenuti aplikaciju i provjeriti konzolu (jquery error)
+14. kreirati js folder u assets folderu
+15. preuzeti jquery i staviti ga u js folder
+16. dodati u index.html prije bootstrap.js-a:
 <script src="assets/js/jquery-3.2.1.js"></script>
-16. ponovno provjeriti konzolu
-17. izdvojiti html u app.component.html datoteku
-18. postaviti templateURL u app.component.ts:
+17. ponovno provjeriti konzolu
+18. izdvojiti html u app.component.html datoteku
+19. postaviti templateURL u app.component.ts:
 templateUrl: './app.component.html'
-19. kreirati app.component.css i dodati:
+20. kreirati app.component.css i dodati:
 h2{
     color: cornflowerblue;
 }
-15. u app.component.ts dodati:
+21. u app.component.ts dodati:
 styleUrls: ['./app.component.css']
 
 /*******************************************************************\
@@ -228,6 +237,33 @@ categoryList: Array<CategoryListModel> = [
 14. promijeniti category-list.component.html na:
 <a [href]="category.id" class="list-group-item" *ngFor="let category of categoryList">{{category.text}}</a>
 15. pokazati da se url ne resolvea
+16. extensions -> debugger for chrome -> install -> reload
+17. otvoriti bs-config.json i preurediti u:
+{
+  "server": {
+    "baseDir": "src",
+    "routes": {
+      "/node_modules": "node_modules"
+    }
+  },
+    "open": false
+}
+18. Debug -> open configurations
+19. upisati:
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome against localhost",
+            "url": "http://localhost:3000",
+            "sourceMaps": true,
+            "webRoot": "${workspaceRoot}/src"
+        }
+    ]
+}
+20. testirati debugging
 
 /*******************************************************************\
 4 - Routing
@@ -235,23 +271,34 @@ categoryList: Array<CategoryListModel> = [
 1. kreirati folder category unutar categories foldera
 2. kreirati datoteku category.component.ts
 3. kreirati datoteku category.component.html
+4. kreirati datoteku category.model.ts
+5. u category.model.ts dodati:
+export class CategoryModel{
+     id: number;
+     name: string;
+     productList: any;
+}
 4. u category.component.ts dodati:
 import { Component, OnInit } from '@angular/core';
+
+import { CategoryModel } from "./category.model";
 
 @Component({
   selector: 'category',
   templateUrl: './category.component.html'
 })
 export class CategoryComponent{
-    name: string;
+    category: CategoryModel;
 	
 	ngOnInit(): void{
-		this.name = "Odaberite kategoriju";
+		this.category = new CategoryModel();
+		this.category.id = 0;
+		this.category.name = "Odaberite kategoriju";
 	}
 }
 5. u category.component.html dodati:
 <div class="col-xs-12">
-    <h1>{{name}}</h1>
+    <h1>{{category.id}} - {{category.name}}</h1>
 </div>
 6. u category.component.html premjestiti iz app.component.html:
 <div class="col-xs-12 col-lg-4">
@@ -278,6 +325,8 @@ export class CategoryComponent{
 7. dodati category u app.module.ts:
 import { CategoryComponent }  from './categories/category/category.component';
 declarations: [ AppComponent, CategoryListComponent, CategoryComponent ],
+
+
 8. u app.module.ts dodati:
 import { RouterModule }   from '@angular/router';
   imports:      [ BrowserModule,
