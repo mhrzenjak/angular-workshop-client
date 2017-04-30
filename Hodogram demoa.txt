@@ -220,22 +220,22 @@ declarations: [ AppComponent, CategoryListComponent ],
 11. kreirati category-list.model.ts i popuniti sa:
 export class CategoryListModel{
      id: number;
-     text: string;
+     name: string;
 }
 12. dodati u category-list.component.ts:
 import { CategoryListModel } from "./category-list.model";
 13. zamijeniti category-list varijablu sa:
 categoryList: Array<CategoryListModel> = [
-        {id: 1, text: "Rock"},
-        {id: 2, text: "Punk"},
-        {id: 3, text: "Pop"},
-        {id: 4, text: "Techno"},
-        {id: 5, text: "House"},
-        {id: 6, text: "Klasična glazba"},
-        {id: 7, text: "Ostalo"}
+        {id: 1, name: "Rock"},
+        {id: 2, name: "Punk"},
+        {id: 3, name: "Pop"},
+        {id: 4, name: "Techno"},
+        {id: 5, name: "House"},
+        {id: 6, name: "Klasična glazba"},
+        {id: 7, name: "Ostalo"}
     ];
 14. promijeniti category-list.component.html na:
-<a [href]="category.id" class="list-group-item" *ngFor="let category of categoryList">{{category.text}}</a>
+<a [href]="category.id" class="list-group-item" *ngFor="let category of categoryList">{{category.name}}</a>
 15. pokazati da se url ne resolvea
 16. extensions -> debugger for chrome -> install -> reload
 17. otvoriti bs-config.json i preurediti u:
@@ -324,46 +324,109 @@ export class CategoryComponent{
 </div>
 7. dodati category u app.module.ts:
 import { CategoryComponent }  from './categories/category/category.component';
+
 declarations: [ AppComponent, CategoryListComponent, CategoryComponent ],
 
-
-8. u app.module.ts dodati:
-import { RouterModule }   from '@angular/router';
-  imports:      [ BrowserModule,
-       RouterModule.forRoot([
-      {
-        path: 'category/:id',
-        component: CategoryComponent
-      }
-    ])
-   ],
-9. promijeniti content dio app.component.html u:
+8. promijeniti content dio app.component.html u:
 <div class="col-xs-12 col-sm-9" id="content">
 			<div class="jumbotron">
-				<img src="assets/images/banner.png" class="img-responsive"/>
+				<img src="assets/images/banner.png" class="img-responsive" />
 				<p>This is an example to show the potential of an offcanvas layout pattern in Bootstrap. Try some responsive-range viewport
 					sizes to see it in action.</p>
 			</div>
 			<div class="row">
+				<category></category>
+			</div>
+		</div>
+9. pogledati aplikaciju
+10. kreirati dashboard folder unutar app foldera
+11. kreirati dashboard.component.ts i dashboard.component.html unutar dashboard foldera
+12. premjestiti jumbotron iz app.component.html u dashboard.component.html i promijeniti u smisleni text:
+<div class="jumbotron">
+    <img src="assets/images/banner.png" class="img-responsive" />
+    <p>Dobrodošli u primjer webshopa razvijenog u Angularu.</p>
+</div>
+13. kopirati iz category.component.html u dashboard.component.html nakon jumbotrona:
+<div class="col-xs-12 col-lg-4">
+    <h2>Heading</h2>
+    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
+        nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+    </p>
+    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+</div>
+<div class="col-xs-12 col-lg-4">
+    <h2>Heading</h2>
+    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
+        nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+    </p>
+    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+</div>
+<div class="col-xs-12 col-lg-4">
+    <h2>Heading</h2>
+    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
+        nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+    </p>
+    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+</div>
+13. popuniti dashboard.component.ts sa:
+import { Component } from "@angular/core";
+
+@Component({
+	selector: 'dashboard',
+	templateUrl: './dashboard.component.html'
+})
+export class DashboardComponent{}
+14. u app.module.ts dodati:
+import { DashboardComponent } from "./dashboard/dashboard.component";
+
+declarations: [AppComponent, CategoryListComponent, CategoryComponent, DashboardComponent],
+15. izmjeniti category tag sa dashboard u app.component.html
+16. pokrenuti aplikaciju
+17. u app.module.ts dodati:
+import { RouterModule }   from '@angular/router';
+
+  imports: [
+    BrowserModule,
+    RouterModule.forRoot([
+      {
+        path: 'dashboard',
+        component: DashboardComponent
+      },
+      {
+        path: 'category/:id',
+        component: CategoryComponent
+      },
+      {
+        path: '**',
+        component: DashboardComponent
+      }
+    ])
+  ],
+18. promijeniti content dio app.component.html u:
+<div class="col-xs-12 col-sm-9" id="content">
+			<div class="row">
 				<router-outlet></router-outlet>
 			</div>
 		</div>
-10. promijeniti category-list.component.html u:
-<a class="list-group-item" *ngFor="let category of categoryList" [routerLink]="['/category', category.id]" routerLinkActive="active">{{category.text}}</a>
-11. dodati u category.component.ts:
+19. promijeniti category-list.component.html u:
+<a class="list-group-item" *ngFor="let category of categoryList" [routerLink]="['/category', category.id]" routerLinkActive="active">{{category.name}}</a>
+20. dodati u category.component.ts:
 import { ActivatedRoute, Params }   from '@angular/router';
 
-constructor(private route: ActivatedRoute){}
+	constructor(private route: ActivatedRoute){}
 
-ngOnInit(): void{
-	var category = this;
-	this.route.params.subscribe(
-		function (params: Params) {
-			category.name = params["id"];
-		}
-	);
-}
-12. promijeniti u category.component.ts:
+	ngOnInit(): void {
+		var component = this;
+		this.category = new CategoryModel();
+		this.route.params.subscribe(
+			function (params: Params) {
+				component.category.id = params["id"];
+				component.category.name = "Placeholder";
+			}
+		);
+	}
+21. pokrenuti aplikaciju
+22. promijeniti u category.component.ts:
 ngOnInit(): void{
 	this.route.params.subscribe(
 		params => {
@@ -371,6 +434,7 @@ ngOnInit(): void{
 		}
 	);
 }
+23. pokrenuti aplikaciju
 
 /*******************************************************************\
 5 - Servisi
@@ -385,27 +449,34 @@ export class CategoryService {
 
 }
 2. preseliti iz category-list.component.ts u category.service.ts:
-categoryList: Array<CategoryListModel> = [
-        {id: 1, text: "Rock"},
-        {id: 2, text: "Punk"},
-        {id: 3, text: "Pop"},
-        {id: 4, text: "Techno"},
-        {id: 5, text: "House"},
-        {id: 6, text: "Klasična glazba"},
-        {id: 7, text: "Ostalo"}
+  categoryList: Array<CategoryListModel> = [
+    { id: 1, name: "Rock" },
+    { id: 2, name: "Punk" },
+    { id: 3, name: "Pop" },
+    { id: 4, name: "Techno" },
+    { id: 5, name: "House" },
+    { id: 6, name: "Klasična glazba" },
+    { id: 7, name: "Ostalo" }
+  ];
+3. preurediti category.service.ts u:
+    categoryList: Array<CategoryListModel> = [
+        { id: 1, name: "Rock" },
+        { id: 2, name: "Punk" },
+        { id: 3, name: "Pop" },
+        { id: 4, name: "Techno" },
+        { id: 5, name: "House" },
+        { id: 6, name: "Klasična glazba" },
+        { id: 7, name: "Ostalo" }
     ];
-3. preurediti category-list.service.ts u:
-getCategories(): Array<CategoryListModel>{
-        var categoryList: Array<CategoryListModel> = [
-            {id: 1, text: "Rock"},
-			{id: 2, text: "Punk"},
-			{id: 3, text: "Pop"},
-			{id: 4, text: "Techno"},
-			{id: 5, text: "House"},
-			{id: 6, text: "Klasična glazba"},
-			{id: 7, text: "Ostalo"}
-        ];
-        return categoryList;
+
+    getCategories(): Array<CategoryListModel>{
+
+        return this.categoryList;
+    }
+
+    getCategory(id: number): CategoryModel{
+
+        return this.categoryList.find(x => x.id == id) as CategoryModel;
     }
 4. preurediti category-list.component.ts u:
 import { Component, OnInit } from '@angular/core';
@@ -428,7 +499,40 @@ export class CategoryListComponent{
 5. pogledati aplikaciju, primjetiti error za nedostatak providera
 6. dodati u app.module.ts:
 import { CategoryService } from "./categories/shared/category.service";
+
 providers: [ CategoryService ],
+7. pokrenuti aplikaciju
+8. preurediti category.component.ts u:
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+
+import { CategoryModel } from "./category.model";
+
+import { CategoryService } from "../shared/category.service";
+
+@Component({
+	selector: 'category',
+	templateUrl: './category.component.html'
+})
+export class CategoryComponent {
+
+	category: CategoryModel;
+
+	constructor(
+		private route: ActivatedRoute,
+		private categoryService: CategoryService
+	) { }
+
+	ngOnInit(): void {
+		this.category = new CategoryModel();
+		this.route.params.subscribe(
+			params => {
+				this.category = this.categoryService.getCategory(params["id"]);
+			}
+		);
+	}
+}
+
 
 /*******************************************************************\
 6 - Observable

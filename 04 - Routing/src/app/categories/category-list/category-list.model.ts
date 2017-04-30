@@ -1,4 +1,4 @@
-export class CategoryListModel{
-     id: number;
-     name: string;
+export class CategoryListModel {
+    id: number;
+    name: string;
 }

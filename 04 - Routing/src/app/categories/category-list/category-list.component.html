@@ -1,1 +1,1 @@
-<a [href]="category.id" class="list-group-item" *ngFor="let category of categoryList">{{category.name}}</a>
+<a class="list-group-item" *ngFor="let category of categoryList" [routerLink]="['/category', category.id]" routerLinkActive="active">{{category.name}}</a>
