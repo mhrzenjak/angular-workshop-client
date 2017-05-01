@@ -5,17 +5,28 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { CategoryListComponent } from './categories/category-list/category-list.component';
 import { CategoryComponent } from './categories/category/category.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
-  imports: [BrowserModule,
+  imports: [
+    BrowserModule,
     RouterModule.forRoot([
+      {
+        path: 'dashboard',
+        component: DashboardComponent
+      },
       {
         path: 'category/:id',
         component: CategoryComponent
+      },
+      {
+        path: '**',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
       }
     ])
   ],
-  declarations: [AppComponent, CategoryListComponent, CategoryComponent],
+  declarations: [AppComponent, CategoryListComponent, CategoryComponent, DashboardComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

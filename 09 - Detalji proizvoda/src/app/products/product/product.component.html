@@ -1,0 +1,13 @@
+<div class="media" *ngIf="product">
+    <div class="media-left">
+        <img class="media-object" src="assets/images/record.png">
+    </div>
+    <div class="media-body">
+        <h1 class="media-heading">{{product.name}}</h1>
+        <h2>{{product.albumName}}</h2>
+        <p>Trajanje: {{product.duration}} s</p>
+        <p>{{product.description}}</p>
+        <p>Cijena: {{product.price}} kn</p>
+        <button class="btn btn-success">Dodaj u košaricu</button>
+    </div>
+</div>
