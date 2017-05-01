@@ -1,42 +1,55 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { ProductSummaryModel } from "../../products/product-summary/product-summary.model";
-import { CategoryService } from "../shared/category.service";
+import { CategoryModel } from "./category.model";
+
+import { ICategoryService, I_CATEGORY_SERVICE } from "../shared/icategory.service";
 
 @Component({
-    selector: 'category',
-    templateUrl: './category.component.html'
+	selector: 'category',
+	templateUrl: './category.component.html',
+	styleUrls: ['./category.component.css']
 })
 export class CategoryComponent {
-    id: number;
-    name: string;
-    productList: Array<ProductSummaryModel>;
 
-    constructor(
-        private route: ActivatedRoute,
-        private categoryService: CategoryService) { }
+	category: CategoryModel;
 
-    ngOnInit(): void {
-        this.route.params.subscribe(
-            params => {
-                this.name = params["id"];
-                this.id = params["id"];
-                this.getCategory(this.id);
-            }
-        );
-    }
+	constructor(
+		private route: ActivatedRoute,
+		@Inject(I_CATEGORY_SERVICE) private categoryService: ICategoryService,
+	) { }
 
-    getCategory(id: number) {
-        this.categoryService.getCategory(this.id).subscribe(
-            value => {
-                this.productList = value;
-            },
-            error => {
-                this.productList = null;
-                console.log(error);
-            }
-        );
-    }
+	ngOnInit(): void {
 
+		this.category = new CategoryModel();
+
+		this.route.params.subscribe(
+			params => {
+				this.getCategory(params["id"]);
+			}
+		);
+	}
+
+	getCategory(id: number) {
+
+		this.categoryService.getCategory(id).subscribe(
+			value => {
+				this.category = value;
+			},
+			error => {
+				this.category = null;
+				console.log(error);
+			}
+		);
+	}
+
+	selectNextCategory() {
+
+		this.categoryService.selectCategory(this.category.id + 1);
+	}
+
+	selectPreviousCategory() {
+
+		this.categoryService.selectCategory(this.category.id - 1);
+	}
 }

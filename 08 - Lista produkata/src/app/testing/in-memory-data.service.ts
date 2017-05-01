@@ -1,20 +1,11 @@
 import { InMemoryDbService } from 'angular-in-memory-web-api';
 
 import { CategoryListModel } from "../categories/category-list/category-list.model";
+import { CategoryModel } from "../categories/category/category.model";
 import { ProductSummaryModel } from "../products/product-summary/product-summary.model";
 
 export class InMemoryDataService implements InMemoryDbService {
     createDb() {
-        const categoryList: Array<CategoryListModel> = [
-            { id: 1, text: "Rock" },
-            { id: 2, text: "Punk" },
-            { id: 3, text: "Pop" },
-            { id: 4, text: "Techno" },
-            { id: 5, text: "House" },
-            { id: 6, text: "Klasična glazba" },
-            { id: 7, text: "Ostalo" },
-            { id: 8, text: "Najprodavanije" }
-        ];
 
         const productRockList: Array<ProductSummaryModel> = [
             { id: 1, name: "La Grange - ZZ Top", description: "Jedna od najpoznatijih ZZ Top pjesama. Svrstana u top 100 gitarskih pjesama svih vremena.", price: 4.25 },
@@ -29,12 +20,20 @@ export class InMemoryDataService implements InMemoryDbService {
             { id: 7, name: "Ride of the Valkyries - Richard Wagner", description: "Klasik.", price: 3.44 },
         ];
 
+        const categoryList: Array<CategoryModel> = [
+            { id: 1, name: "Rock", productList: productRockList },
+            { id: 2, name: "Punk", productList: null },
+            { id: 3, name: "Pop", productList: null },
+            { id: 4, name: "Techno", productList: null },
+            { id: 5, name: "House", productList: null },
+            { id: 6, name: "Klasična glazba", productList: productClassicalList },
+            { id: 7, name: "Ostalo", productList: null },
+            { id: 8, name: "Najprodavanije", productList: null }
+        ];
+
         return {
-            categories: categoryList,
-            category: [
-                { id: 1, productList: productRockList },
-                { id: 6, productList: productClassicalList },
-            ]
+            categories: categoryList as Array<CategoryListModel>,
+            category: categoryList
         };
     }
 }
