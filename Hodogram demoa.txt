@@ -703,41 +703,67 @@ import { Router } from "@angular/router";
             });
 			
 /*******************************************************************\
-7 - In memory mock
+7 - In memory mock i interface
 \*******************************************************************/
 1. kreirati testing folder unutar app foldera
 2. kreirati category-mock.service.ts i popuniti sa:
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 
 import { CategoryListModel } from "../categories/category-list/category-list.model";
+import { CategoryModel } from "../categories/category/category.model";
+
 import { CategoryService } from "../categories/shared/category.service";
 
 @Injectable()
 export class CategoryMockService implements CategoryService {
 
-    getCategories(): Observable<Array<CategoryListModel>>{}
+    categoryList: Array<CategoryListModel>;
+
+    selectedCategorySubject: Subject<number> = new Subject<number>();
+
+    selectedCategoryChanged: Observable<number> = this.selectedCategorySubject.asObservable();
+
+    getCategories(): Observable<Array<CategoryListModel>>{
+
+        return Observable.of(this.categoryList);
+    }
+
+    getCategory(id: number): Observable<CategoryModel>{
+
+        return Observable.of(this.categoryList.find(x => x.id == id) as CategoryModel);
+    }
+
+    selectCategory(id: number){
+
+        this.selectedCategorySubject.next(id);
+    }
 }
 3. kreirati in-memory-data.service.ts u testing folderu i popuniti sa:
 import { InMemoryDbService } from 'angular-in-memory-web-api';
 
 import { CategoryListModel } from "../categories/category-list/category-list.model";
+import { CategoryModel } from "../categories/category/category.model";
 
 export class InMemoryDataService implements InMemoryDbService {
     createDb() {
+
         const categoryList: Array<CategoryListModel> = [
-            { id: 1, text: "Rock" },
-            { id: 2, text: "Punk" },
-            { id: 3, text: "Pop" },
-            { id: 4, text: "Techno" },
-            { id: 5, text: "House" },
-            { id: 6, text: "Klasična glazba" },
-            { id: 7, text: "Ostalo" },
-			{ id: 8, text: "Najprodavanije" }
+            { id: 1, name: "Rock" },
+            { id: 2, name: "Punk" },
+            { id: 3, name: "Pop" },
+            { id: 4, name: "Techno" },
+            { id: 5, name: "House" },
+            { id: 6, name: "Klasična glazba" },
+            { id: 7, name: "Ostalo" },
+            { id: 8, name: "Najprodavanije" }
         ];
-		return { 
-            categories: categoryList
-          };
+
+        return {
+            categories: categoryList,
+            category: categoryList as Array<CategoryModel>
+        };
     }
 }
 4. izmijeniti category-mock.service.ts u:
@@ -772,7 +798,86 @@ import { CategoryMockService } from "./testing/category-mock.service";
     InMemoryWebApiModule.forRoot(InMemoryDataService),
 	
   providers: [{ provide: CategoryService, useClass: CategoryMockService }],
-  
+6. pokrenuti aplikaciju
+7. dodati u category.service.ts:
+    constructor(private http: Http){}
+8. primjetiti kako u category-mock.service.ts imamo problem s privatnim poljem
+9. kreirati icategory.service.ts u categories/shared folderu i popuniti sa:
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+
+import { CategoryListModel } from "../category-list/category-list.model";
+import { CategoryModel } from "../category/category.model";
+
+export interface ICategoryService {
+
+    selectedCategoryChanged: Observable<number>;
+
+    getCategories(): Observable<Array<CategoryListModel>>;
+
+    getCategory(id: number): Observable<CategoryModel>;
+
+    selectCategory(id: number): void;
+}
+10. dodati u category.service.ts:
+import { ICategoryService } from "./icategory.service";
+
+export class CategoryService implements ICategoryService {
+
+	private categoryList: Array<CategoryListModel> = [
+        { id: 1, name: "Rock" },
+        { id: 2, name: "Punk" },
+        { id: 3, name: "Pop" },
+        { id: 4, name: "Techno" },
+        { id: 5, name: "House" },
+        { id: 6, name: "Klasična glazba" },
+        { id: 7, name: "Ostalo" }
+    ];
+
+    private selectedCategorySubject: Subject<number> = new Subject<number>();
+11. promijeniti u category-mock.service.ts:
+import { ICategoryService } from "../categories/shared/icategory.service";
+
+export class CategoryMockService implements ICategoryService {
+
+obrisati: categoryList: Array<CategoryListModel>;
+
+    private selectedCategorySubject: Subject<number> = new Subject<number>();
+
+    private getCategoriesURL: string = 'api/categories';
+    private getCategoryURL: string = 'api/category/';
+12. dodati u app.module.ts:
+import { ICategoryService } from "./categories/shared/icategory.service";
+
+  providers: [ { provide: ICategoryService, useClass: CategoryMockService } ],
+13. primjetiti problem sa interfaceom
+14. dodati u icategory.service.ts:
+import { InjectionToken } from '@angular/core';
+
+export let I_CATEGORY_SERVICE = new InjectionToken<ICategoryService>('icategory.service');
+15. promijeniti u app.module.ts:
+import { I_CATEGORY_SERVICE } from "./categories/shared/icategory.service";
+
+  providers: [ { provide: I_CATEGORY_SERVICE, useClass: CategoryMockService } ],
+16. promijeniti u category-list.component.ts
+import { Component, OnInit, Inject } from '@angular/core';
+
+import { ICategoryService, I_CATEGORY_SERVICE } from "../shared/icategory.service";
+
+    constructor(
+        @Inject(I_CATEGORY_SERVICE) private categoryService: ICategoryService,
+        private router: Router
+    ) { }
+17. promijeniti u category.component.ts:
+import { Component, OnInit, Inject } from '@angular/core';
+
+import { ICategoryService, I_CATEGORY_SERVICE } from "../shared/icategory.service";
+
+	constructor(
+		private route: ActivatedRoute,
+		@Inject(I_CATEGORY_SERVICE) private categoryService: ICategoryService,
+	) { }
+	
 /*******************************************************************\
 8 - Lista produkata
 \*******************************************************************/
