@@ -4,17 +4,18 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 import { ProductModel } from "../products/product/product.model";
-import { ProductService } from "../products/shared/product.service";
+import { IProductService } from "../products/shared/iproduct.service";
 
 @Injectable()
-export class ProductMockService implements ProductService {
+export class ProductMockService implements IProductService {
 
     getProductURL: string = 'api/product/';
 
-    constructor(private http: Http){}
+    constructor(private http: Http) { }
 
-    getProduct(id: number): Observable<ProductModel>{
+    getProduct(id: number): Observable<ProductModel> {
+
         return this.http.get(this.getProductURL + id)
-        .map(response => response.json().data as ProductModel);
+            .map(response => response.json().data as ProductModel);
     }
 }

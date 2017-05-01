@@ -1315,47 +1315,9 @@ export class ProductComponent {
 /*******************************************************************\
 10 - Direktive
 \*******************************************************************/
-1. dodati u category.service.ts:
-import { Subject }    from 'rxjs/Subject';
-
-currentCategoryName: Subject<string>;
-    currentCategoryNameChanged: Observable<string>;
-	
-	setCurrentCategoryName(name: string){}
-2. dodati u category-mock.service.ts:
-import { Subject }    from 'rxjs/Subject';
-
-currentCategoryName: Subject<string> = new Subject<string>();
-    currentCategoryNameChanged: Observable<string> = this.currentCategoryName.asObservable();
-
-	setCurrentCategoryName(name: string){
-        this.currentCategoryName.next(name);
-    }
-3. dodati u category-list.component.ts:
-onCategoryChanged(name: string){
-        this.categoryService.setCurrentCategoryName(name);
-    }
-4. dodati u category-list.component.html:
-(click)="onCategoryChanged(category.text)"
-5. category.component.ts preurediti u:
-    ngOnInit(): void {
-        this.route.params.subscribe(
-            params => {
-                this.id = params["id"];
-                this.getCategory(this.id);
-            }
-        );
-
-        this.categoryService.currentCategoryNameChanged.subscribe(
-            value => {
-                this.name = value;
-            }
-        )
-    }
-6. pokrenuti aplikaciju i pokazati dohvat imena; primjetiti da ručni upis linka ne postavlja ime; pitati kako riješiti problem
-7. kreirati shared folder unutar app foldera
-8. kreirati rotate-on-hover folder unutar shared foldera
-9. u rotate-on-hover folder dodati rotate-on-hover.directive.ts i popuniti sa:
+1. kreirati shared folder unutar app foldera
+2. kreirati rotate-on-hover folder unutar shared foldera
+3. u rotate-on-hover folder dodati rotate-on-hover.directive.ts i popuniti sa:
 import { Directive, HostListener, Renderer2, ElementRef } from '@angular/core';
 
 @Directive({
@@ -1386,12 +1348,47 @@ export class RotateOnHoverDirective{
         }
     }
 }
-10. u app.module.ts dodati:
+4. u app.module.ts dodati:
 import { RotateOnHoverDirective } from "./shared/rotate-on-hover/rotate-on-hover.directive";
 
-declarations: [AppComponent, CategoryListComponent, CategoryComponent, ProductSummaryComponent, ProductComponent, RotateOnHoverDirective],
-11. u product-summary.component.ts dodati:
+  declarations: [
+    AppComponent, CategoryListComponent, CategoryComponent, DashboardComponent, ProductSummaryComponent, ProductComponent,
+    RotateOnHoverDirective
+  ],
+5. u product-summary.component.html dodati:
 <img rotateOnHover src="assets/images/record.png">
+6. u product.component.html dodati:
+<img rotateOnHover class="media-object" src="assets/images/record.png">
+7. u style.css dodati:
+.spin
+{
+-webkit-animation: spin1 2s infinite linear;
+-moz-animation: spin1 2s infinite linear;
+-o-animation: spin1 2s infinite linear;
+-ms-animation: spin1 2s infinite linear;
+animation: spin1 2s infinite linear;
+}
+
+@-webkit-keyframes spin1 {
+0% { -webkit-transform: rotate(0deg);}
+100% { -webkit-transform: rotate(360deg);}
+}
+@-moz-keyframes spin1 {
+0% { -moz-transform: rotate(0deg);}
+100% { -moz-transform: rotate(360deg);}
+}
+@-o-keyframes spin1 {
+0% { -o-transform: rotate(0deg);}
+100% { -o-transform: rotate(360deg);}
+}
+@-ms-keyframes spin1 {
+0% { -ms-transform: rotate(0deg);}
+100% { -ms-transform: rotate(360deg);}
+}
+@keyframes spin1 {
+0% { transform: rotate(0deg);}
+100% { transform: rotate(360deg);}
+} 
 
 /*******************************************************************\
 11 - Spajanje s Web-API
