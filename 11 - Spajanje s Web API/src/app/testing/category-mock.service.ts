@@ -1,34 +1,40 @@
-// import { Injectable } from '@angular/core';
-// import { Observable } from 'rxjs/Observable';
-// import { Http } from '@angular/http';
-// import { Subject }    from 'rxjs/Subject';
-// import 'rxjs/add/operator/map';
+import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/map';
 
-// import { CategoryListModel } from "../categories/category-list/category-list.model";
-// import { CategoryService } from "../categories/shared/category.service";
-// import { ProductSummaryModel } from "../products/product-summary/product-summary.model";
+import { CategoryListModel } from "../categories/category-list/category-list.model";
+import { CategoryModel } from "../categories/category/category.model";
 
-// @Injectable()
-// export class CategoryMockService implements CategoryService {
-//     currentCategoryName: Subject<string> = new Subject<string>();
-//     currentCategoryNameChanged: Observable<string> = this.currentCategoryName.asObservable();
+import { ICategoryService } from "../categories/shared/icategory.service";
 
-//     getCategoriesURL: string = 'api/categories';
-//     getCategoryURL: string = 'api/category/';
+@Injectable()
+export class CategoryMockService implements ICategoryService {
 
-//     constructor(private httpService: Http){}
+    private selectedCategorySubject: Subject<number> = new Subject<number>();
 
-//     getCategories(): Observable<Array<CategoryListModel>>{
-//         return this.httpService.get(this.getCategoriesURL)
-//         .map(response => response.json().data as Array<CategoryListModel>);
-//     }
+    private getCategoriesURL: string = 'api/categories';
+    private getCategoryURL: string = 'api/category/';
 
-//     getCategory(id: number): Observable<Array<ProductSummaryModel>>{
-//         return this.httpService.get(this.getCategoryURL + id)
-//         .map(response => response.json().data.productList as Array<ProductSummaryModel>);
-//     }
+    selectedCategoryChanged: Observable<number> = this.selectedCategorySubject.asObservable();
 
-//     setCurrentCategoryName(name: string){
-//         this.currentCategoryName.next(name);
-//     }
-// }
+    constructor(private http: Http){}
+
+    getCategories(): Observable<Array<CategoryListModel>>{
+
+        return this.http.get(this.getCategoriesURL)
+        .map(response => response.json().data as Array<CategoryListModel>);
+    }
+
+    getCategory(id: number): Observable<CategoryModel>{
+
+        return this.http.get(this.getCategoryURL + id)
+        .map(response => response.json().data as CategoryModel);
+    }
+
+    selectCategory(id: number){
+
+        this.selectedCategorySubject.next(id);
+    }
+}

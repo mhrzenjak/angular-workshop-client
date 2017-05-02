@@ -1,0 +1,196 @@
+/*******************************************************************\
+8 - Lista proizvoda
+\*******************************************************************/
+1. kreirati products folder unutar app foldera
+2. kreirati product-summary folder unutar products foldera
+3. kreirati product-summary.model.ts i popuniti sa:
+export class ProductSummaryModel{
+     id: number;
+     name: string;
+     description: string;
+     price: number;
+}
+4. kreairati product-summary.component.ts i popuniti sa:
+import { Component, Input } from '@angular/core';
+
+import { ProductSummaryModel } from "./product-summary.model";
+
+@Component({
+  selector: 'product-summary',
+  templateUrl: './product-summary.component.html'
+})
+export class ProductSummaryComponent{
+    @Input() productSummary: ProductSummaryModel;
+}
+5. kreirati product-summary.component.html i preuzeti sa http://getbootstrap.com/components/#thumbnails-custom-content html:
+<div class="thumbnail">
+      <img src="..." alt="...">
+      <div class="caption">
+        <h3>Thumbnail label</h3>
+        <p>...</p>
+        <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+      </div>
+    </div>
+6. u assets/image folder staviti record.png
+7. preurediti product-summary.component.html u:
+<div class="thumbnail">
+    <img src="assets/images/record.png">
+    <div class="caption">
+        <h3>{{productSummary.name}}</h3>
+        <p>{{productSummary.description}}</p>
+        <p>Cijena: {{productSummary.price}} kn</p>
+        <p><a href="#" class="btn btn-default" role="button">Dodaj u košaricu</a></p>
+    </div>
+</div>
+9. preurediti category.component.ts u:
+import { Component, OnInit, Inject } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+
+import { CategoryModel } from "./category.model";
+
+import { ICategoryService, I_CATEGORY_SERVICE } from "../shared/icategory.service";
+
+@Component({
+	selector: 'category',
+	templateUrl: './category.component.html'
+})
+export class CategoryComponent {
+
+	category: CategoryModel;
+
+	constructor(
+		private route: ActivatedRoute,
+		@Inject(I_CATEGORY_SERVICE) private categoryService: ICategoryService,
+	) { }
+
+	ngOnInit(): void {
+
+		this.category = new CategoryModel();
+
+		this.route.params.subscribe(
+			params => {
+				this.getCategory(params["id"]);
+			}
+		);
+	}
+
+	getCategory(id: number) {
+
+		this.categoryService.getCategory(id).subscribe(
+			value => {
+				this.category = value;
+			},
+			error => {
+				this.category = null;
+				console.log(error);
+			}
+		);
+	}
+
+	selectNextCategory() {
+
+		this.categoryService.selectCategory(this.category.id + 1);
+	}
+
+	selectPreviousCategory() {
+
+		this.categoryService.selectCategory(this.category.id - 1);
+	}
+}
+10. category.model.ts promijeniti u:
+import { ProductSummaryModel } from "../../products/product-summary/product-summary.model";
+
+export class CategoryModel{
+     id: number;
+     name: string;
+     productList: Array<ProductSummaryModel>;
+}
+11. preurediti in-memory-data.service.ts u:
+import { InMemoryDbService } from 'angular-in-memory-web-api';
+
+import { CategoryListModel } from "../categories/category-list/category-list.model";
+import { CategoryModel } from "../categories/category/category.model";
+import { ProductSummaryModel } from "../products/product-summary/product-summary.model";
+
+export class InMemoryDataService implements InMemoryDbService {
+    createDb() {
+
+        const productRockList: Array<ProductSummaryModel> = [
+            { id: 1, name: "La Grange - ZZ Top", description: "Jedna od najpoznatijih ZZ Top pjesama. Svrstana u top 100 gitarskih pjesama svih vremena.", price: 4.25 },
+            { id: 2, name: "Comfortably numb - Pink Floyd", description: "Jedna od najpoznatijih Pink Floyd pjesama. Svrstana u top 500 pjesama svih vremena.", price: 3.76 },
+            { id: 3, name: "I'm Gonna Be (500 Miles) - The Proclaimers", description: "Izvorna keltska rock pjesma.", price: 4.44 },
+        ];
+
+        const categoryList: Array<CategoryModel> = [
+            { id: 1, name: "Rock", productList: productRockList },
+            { id: 2, name: "Punk", productList: null },
+            { id: 3, name: "Pop", productList: null },
+            { id: 4, name: "Techno", productList: null },
+            { id: 5, name: "House", productList: null },
+            { id: 6, name: "Klasična glazba", productList: null },
+            { id: 7, name: "Ostalo", productList: null },
+            { id: 8, name: "Najprodavanije", productList: null }
+        ];
+
+        return {
+            categories: categoryList as Array<CategoryListModel>,
+            category: categoryList
+        };
+    }
+}
+12. izmjeniti category.component.html u:
+<div class="row">
+    <div class="col-xs-12">
+        <h1>{{category.id}} - {{category.name}}</h1>
+        <a class="btn btn-primary" (click)="selectPreviousCategory()">Prethodna kategorija</a>
+        <a class="btn btn-primary" (click)="selectNextCategory()">Sljedeća kategorija</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-lg-4" *ngFor="let product of category.productList">
+        <product-summary [productSummary]="product"></product-summary>
+    </div>
+</div>
+13. dodati u app.module.ts:
+import { ProductSummaryComponent } from "./products/product-summary/product-summary.component";
+
+  declarations: [AppComponent, CategoryListComponent, CategoryComponent, DashboardComponent, ProductSummaryComponent],
+14. pokrenuti aplikaciju
+15. kreirati category.component.css i popuniti sa:
+.btn {
+    margin-bottom: 10px; 
+}
+16. dodati u category.component:
+	styleUrls: ['./category.component.css']
+17. pokrenuti aplikaciju
+18. dodati u in-memory-data.service.ts:
+        const productClassicalList: Array<ProductSummaryModel> = [
+            { id: 4, name: "Dance of the Knights - Prokofiev", description: "Klasik.", price: 1.23 },
+            { id: 5, name: "Claire de Lune - Claude Debussy", description: "Klasik.", price: 2.34 },
+            { id: 6, name: "O Fortuna - Carl Orff", description: "Klasik.", price: 3.34 },
+            { id: 7, name: "Ride of the Valkyries - Richard Wagner", description: "Klasik.", price: 3.44 },
+        ];
+		
+        const categoryList: Array<CategoryModel> = [
+            { id: 1, name: "Rock", productList: productRockList },
+            { id: 2, name: "Punk", productList: null },
+            { id: 3, name: "Pop", productList: null },
+            { id: 4, name: "Techno", productList: null },
+            { id: 5, name: "House", productList: null },
+            { id: 6, name: "Klasična glazba", productList: productClassicalList },
+            { id: 7, name: "Ostalo", productList: null },
+            { id: 8, name: "Najprodavanije", productList: null }
+        ];
+17. pogledati aplikaciju i primjetiti raspad prilikom 4 itema prikazana na ekranu
+18. preurediti category.component.html u:
+<div class="col-xs-12">
+    <h1>{{category.id}} - {{category.name}}</h1>
+    <a class="btn btn-primary" (click)="selectPreviousCategory()">Prethodna kategorija</a>
+    <a class="btn btn-primary" (click)="selectNextCategory()">Sljedeća kategorija</a>
+</div>
+<div *ngFor="let product of category.productList; let i = index">
+    <div class="col-xs-12 col-lg-4">
+        <product-summary [productSummary]="product"></product-summary>
+    </div>
+    <div class="clearfix" *ngIf="(i+1) % 3 == 0"></div>
+</div>

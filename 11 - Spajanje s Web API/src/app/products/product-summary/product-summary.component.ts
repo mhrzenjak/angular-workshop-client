@@ -8,6 +8,7 @@ import { ProductSummaryModel } from "./product-summary.model";
   templateUrl: './product-summary.component.html'
 })
 export class ProductSummaryComponent {
+
   @Input() productSummary: ProductSummaryModel;
 
   constructor(

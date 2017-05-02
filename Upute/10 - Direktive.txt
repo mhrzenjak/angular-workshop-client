@@ -1,0 +1,77 @@
+/*******************************************************************\
+10 - Direktive
+\*******************************************************************/
+1. kreirati shared folder unutar app foldera
+2. kreirati rotate-on-hover folder unutar shared foldera
+3. u rotate-on-hover folder dodati rotate-on-hover.directive.ts i popuniti sa:
+import { Directive, HostListener, Renderer2, ElementRef } from '@angular/core';
+
+@Directive({
+    selector: "img[rotateOnHover]"
+})
+export class RotateOnHoverDirective{
+
+    constructor(
+        private renderer: Renderer2,
+        private el: ElementRef
+    ){}
+
+    @HostListener("mouseenter") onMouseEnter() {
+        this.hover(true);
+        console.log("true");
+    }
+
+    @HostListener("mouseleave") onMouseLeave() {
+        this.hover(false);
+    }
+
+    hover(shouldRotate: boolean){
+        if(shouldRotate){
+            this.renderer.addClass(this.el.nativeElement, "spin");
+        } 
+        else {
+            this.renderer.removeClass(this.el.nativeElement, "spin");
+        }
+    }
+}
+4. u app.module.ts dodati:
+import { RotateOnHoverDirective } from "./shared/rotate-on-hover/rotate-on-hover.directive";
+
+  declarations: [
+    AppComponent, CategoryListComponent, CategoryComponent, DashboardComponent, ProductSummaryComponent, ProductComponent,
+    RotateOnHoverDirective
+  ],
+5. u product-summary.component.html dodati:
+<img rotateOnHover src="assets/images/record.png">
+6. u product.component.html dodati:
+<img rotateOnHover class="media-object" src="assets/images/record.png">
+7. u style.css dodati:
+.spin
+{
+-webkit-animation: spin1 2s infinite linear;
+-moz-animation: spin1 2s infinite linear;
+-o-animation: spin1 2s infinite linear;
+-ms-animation: spin1 2s infinite linear;
+animation: spin1 2s infinite linear;
+}
+
+@-webkit-keyframes spin1 {
+0% { -webkit-transform: rotate(0deg);}
+100% { -webkit-transform: rotate(360deg);}
+}
+@-moz-keyframes spin1 {
+0% { -moz-transform: rotate(0deg);}
+100% { -moz-transform: rotate(360deg);}
+}
+@-o-keyframes spin1 {
+0% { -o-transform: rotate(0deg);}
+100% { -o-transform: rotate(360deg);}
+}
+@-ms-keyframes spin1 {
+0% { -ms-transform: rotate(0deg);}
+100% { -ms-transform: rotate(360deg);}
+}
+@keyframes spin1 {
+0% { transform: rotate(0deg);}
+100% { transform: rotate(360deg);}
+} 

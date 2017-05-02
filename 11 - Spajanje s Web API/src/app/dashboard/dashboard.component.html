@@ -1,0 +1,10 @@
+<div class="jumbotron">
+    <img src="assets/images/banner.png" class="img-responsive" />
+    <p>Dobrodošli u primjer webshopa razvijenog u Angularu.</p>
+</div>
+
+<div *ngFor="let product of topSellingProducts">
+    <div class="col-xs-12 col-lg-4">
+        <product-summary [productSummary]="product"></product-summary>
+    </div>
+</div>

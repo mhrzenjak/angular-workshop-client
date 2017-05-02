@@ -1,0 +1,96 @@
+/*******************************************************************\
+5 - Servisi
+\*******************************************************************/
+1. kreirati shared folder pod categories
+2. kreirati category.service.ts u shared folderu i popuniti sa:
+import { Injectable } from '@angular/core';
+import { CategoryListModel } from "../category-list/category-list.model";
+
+@Injectable()
+export class CategoryService {
+
+}
+2. preseliti iz category-list.component.ts u category.service.ts:
+  categoryList: Array<CategoryListModel> = [
+    { id: 1, name: "Rock" },
+    { id: 2, name: "Punk" },
+    { id: 3, name: "Pop" },
+    { id: 4, name: "Techno" },
+    { id: 5, name: "House" },
+    { id: 6, name: "Klasična glazba" },
+    { id: 7, name: "Ostalo" }
+  ];
+3. preurediti category.service.ts u:
+    categoryList: Array<CategoryListModel> = [
+        { id: 1, name: "Rock" },
+        { id: 2, name: "Punk" },
+        { id: 3, name: "Pop" },
+        { id: 4, name: "Techno" },
+        { id: 5, name: "House" },
+        { id: 6, name: "Klasična glazba" },
+        { id: 7, name: "Ostalo" }
+    ];
+
+    getCategories(): Array<CategoryListModel>{
+
+        return this.categoryList;
+    }
+
+    getCategory(id: number): CategoryModel{
+
+        return this.categoryList.find(x => x.id == id) as CategoryModel;
+    }
+4. preurediti category-list.component.ts u:
+import { Component, OnInit } from '@angular/core';
+import { CategoryListModel } from "./category-list.model";
+import { CategoryService } from "../shared/category.service";
+
+@Component({
+  selector: 'category-list',
+  templateUrl: './category-list.component.html'
+})
+export class CategoryListComponent{
+    categoryList: Array<CategoryListModel>;
+
+    constructor(private categoryService: CategoryService){}
+
+    ngOnInit(): void{
+        this.categoryList = this.categoryService.getCategories();
+    }
+}
+5. pogledati aplikaciju, primjetiti error za nedostatak providera
+6. dodati u app.module.ts:
+import { CategoryService } from "./categories/shared/category.service";
+
+providers: [ CategoryService ],
+7. pokrenuti aplikaciju
+8. preurediti category.component.ts u:
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+
+import { CategoryModel } from "./category.model";
+
+import { CategoryService } from "../shared/category.service";
+
+@Component({
+	selector: 'category',
+	templateUrl: './category.component.html'
+})
+export class CategoryComponent {
+
+	category: CategoryModel;
+
+	constructor(
+		private route: ActivatedRoute,
+		private categoryService: CategoryService
+	) { }
+
+	ngOnInit(): void {
+		this.category = new CategoryModel();
+		this.route.params.subscribe(
+			params => {
+				this.category = this.categoryService.getCategory(params["id"]);
+			}
+		);
+	}
+}

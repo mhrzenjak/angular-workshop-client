@@ -1,0 +1,236 @@
+/*******************************************************************\
+9 - Detalji proizvoda
+\*******************************************************************/
+1. kreirati folder product u products folderu
+2. kreirati product.component.ts, product.component.html i product.model.ts
+3. popuniti product.model.ts sa:
+import { ProductSummaryModel } from "../product-summary/product-summary.model";
+
+export class ProductModel extends ProductSummaryModel{
+     albumName: string;
+     duration: number;
+}
+4. preuzeti sa http://getbootstrap.com/components/#media-default i popuniti product.component.html sa:
+<div class="media">
+    <div class="media-left">
+        <img class="media-object" src="assets/images/record.png">
+    </div>
+    <div class="media-body">
+        <h1 class="media-heading">{{product.name}}</h1>
+        <h2>{{product.albumName}}</h2>
+        <p>Trajanje: {{product.duration}} s</p>
+        <p>{{product.description}}</p>
+        <p>Cijena: {{product.price}} kn</p>
+        <button class="btn btn-success">Dodaj u košaricu</button>
+    </div>
+</div>
+4. popunit product.component.ts sa:
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+
+import { ProductModel } from "./product.model";
+
+@Component({
+    selector: 'product',
+    templateUrl: './product.component.html'
+})
+export class ProductComponent {
+
+    id: number;
+    product: ProductModel = {
+        id: 1,
+        name: "La Grange - ZZ Top",
+        description: "Jedna od najpoznatijih ZZ Top pjesama. Svrstana u top 100 gitarskih pjesama svih vremena.",
+        price: 4.25,
+        albumName: "Tres Hombres",
+        duration: 231
+    };
+
+    constructor(
+        private route: ActivatedRoute
+    ) { }
+
+    ngOnInit(): void {
+
+        this.route.params.subscribe(
+            params => {
+                this.id = params["id"];
+            }
+        );
+    }
+}
+5. dodati u app.module.ts:
+import { ProductComponent } from "./products/product/product.component";
+
+  declarations: [AppComponent, CategoryListComponent, CategoryComponent, DashboardComponent, ProductSummaryComponent, ProductComponent],
+6. preurediti product-summary.component.html u:
+<div class="thumbnail">
+    <img src="assets/images/record.png">
+    <div class="caption">
+        <h3>
+            <a (click)="goToProductDetail()">{{productSummary.name}}</a>
+        </h3>
+        <p>{{productSummary.description}}</p>
+        <p>Cijena: {{productSummary.price}} kn</p>
+        <p><a href="#" class="btn btn-default" role="button">Dodaj u košaricu</a></p>
+    </div>
+</div>
+7. preurediti product-summary.component.ts u:
+import { Component, Input } from '@angular/core';
+import { Router } from "@angular/router";
+
+import { ProductSummaryModel } from "./product-summary.model";
+
+@Component({
+  selector: 'product-summary',
+  templateUrl: './product-summary.component.html'
+})
+export class ProductSummaryComponent {
+  @Input() productSummary: ProductSummaryModel;
+
+  constructor(
+    private router: Router
+  ) { }
+
+  goToProductDetail(): void {
+    this.router.navigate(['/product', this.productSummary.id]);
+  }
+}
+8. dodati u app.module.ts:
+      {
+        path: 'product/:id',
+        component: ProductComponent
+      }
+9. provjeriti rad aplikacije
+10. kreirati shared folder unutar products foldera
+11. kreirati iproduct.service.ts unutar shared foldera i popuniti sa:
+import { InjectionToken } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+
+import { ProductModel } from "../product/product.model";
+
+export interface IProductService {
+
+    getProduct(id: number): Observable<ProductModel>;
+}
+
+export let I_PRODUCT_SERVICE = new InjectionToken<IProductService>('iproduct.service');
+12. kreirati product-mock.service.ts unutar testing foldera i popuniti sa:
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
+
+import { ProductModel } from "../products/product/product.model";
+import { IProductService } from "../products/shared/iproduct.service";
+
+@Injectable()
+export class ProductMockService implements IProductService {
+
+    getProductURL: string = 'api/product/';
+
+    constructor(private http: Http) { }
+
+    getProduct(id: number): Observable<ProductModel> {
+
+        return this.http.get(this.getProductURL + id)
+            .map(response => response.json().data as ProductModel);
+    }
+}
+13. promijeniti in-memory-data.service.ts u:
+import { InMemoryDbService } from 'angular-in-memory-web-api';
+
+import { CategoryListModel } from "../categories/category-list/category-list.model";
+import { CategoryModel } from "../categories/category/category.model";
+import { ProductSummaryModel } from "../products/product-summary/product-summary.model";
+import { ProductModel } from "../products/product/product.model";
+
+export class InMemoryDataService implements InMemoryDbService {
+    createDb() {
+
+        const productRockList: Array<ProductModel> = [
+            { id: 1, name: "La Grange - ZZ Top", description: "Jedna od najpoznatijih ZZ Top pjesama. Svrstana u top 100 gitarskih pjesama svih vremena.", price: 4.25, albumName: "Tres Hombres", duration: 231 },
+            { id: 2, name: "Comfortably numb - Pink Floyd", description: "Jedna od najpoznatijih Pink Floyd pjesama. Svrstana u top 500 pjesama svih vremena.", price: 3.76, albumName: "The Wall", duration: 383 },
+            { id: 3, name: "I'm Gonna Be (500 Miles) - The Proclaimers", description: "Izvorna keltska rock pjesma.", price: 4.44, albumName: "Sunshine on Leith", duration: 217 },
+        ];
+
+        const productClassicalList: Array<ProductModel> = [
+            { id: 4, name: "Dance of the Knights - Prokofiev", description: "Klasik.", price: 1.23, albumName: "Top 100 Classics", duration: 347 },
+            { id: 5, name: "Claire de Lune - Claude Debussy", description: "Klasik.", price: 2.34, albumName: "Top 100 Classics", duration: 303 },
+            { id: 6, name: "O Fortuna - Carl Orff", description: "Klasik.", price: 3.34, albumName: "Top 100 Classics", duration: 322 },
+            { id: 7, name: "Ride of the Valkyries - Richard Wagner", description: "Klasik.", price: 3.44, albumName: "Top 100 Classics", duration: 301 },
+        ];
+
+        const categoryList: Array<CategoryModel> = [
+            { id: 1, name: "Rock", productList: productRockList as Array<ProductSummaryModel> },
+            { id: 2, name: "Punk", productList: null },
+            { id: 3, name: "Pop", productList: null },
+            { id: 4, name: "Techno", productList: null },
+            { id: 5, name: "House", productList: null },
+            { id: 6, name: "Klasična glazba", productList: productClassicalList as Array<ProductSummaryModel> },
+            { id: 7, name: "Ostalo", productList: null },
+            { id: 8, name: "Najprodavanije", productList: null }
+        ];
+
+        return {
+            categories: categoryList as Array<CategoryListModel>,
+            category: categoryList,
+            product: productRockList.concat(productClassicalList)
+        };
+    }
+}
+14. dodati u app.module.ts:
+import { I_PRODUCT_SERVICE } from "./products/shared/iproduct.service";
+
+import { ProductMockService } from "./testing/product-mock.service";
+
+  providers: [
+    { provide: I_CATEGORY_SERVICE, useClass: CategoryMockService },
+    { provide: I_PRODUCT_SERVICE, useClass: ProductMockService }
+  ],
+15. preurediti product.component.ts u:
+import { Component, OnInit, Inject } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+
+import { ProductModel } from "./product.model";
+
+import { I_PRODUCT_SERVICE, IProductService } from "../shared/iproduct.service";
+
+@Component({
+    selector: 'product',
+    templateUrl: './product.component.html'
+})
+export class ProductComponent {
+
+    product: ProductModel;
+
+    constructor(
+        private route: ActivatedRoute,
+        @Inject(I_PRODUCT_SERVICE) private productService: IProductService,
+    ) { }
+
+    ngOnInit(): void {
+
+        this.route.params.subscribe(
+            params => {
+                this.getProduct(params["id"]);
+            }
+        );
+    }
+
+    getProduct(id: number){
+
+        this.productService.getProduct(id).subscribe(
+            value => {
+                this.product = value;
+            },
+            error => {
+                this.product = null;
+                console.log(error);
+            }
+        );
+    }
+}
+16. prikazati da sučelje proizvoda puca
+17. u product.component.html promijeniti:
+<div class="media" *ngIf="product">

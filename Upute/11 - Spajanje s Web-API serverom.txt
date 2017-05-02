@@ -1,0 +1,154 @@
+/*******************************************************************\
+11 - Spajanje s Web-API serverom
+\*******************************************************************/
+1. pokrenuti web-api server
+2. izmjeniti category.service.ts u:
+import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/map';
+
+import { CategoryListModel } from "../category-list/category-list.model";
+import { CategoryModel } from "../category/category.model";
+
+import { ICategoryService } from "./icategory.service";
+
+@Injectable()
+export class CategoryService implements ICategoryService {
+
+    private selectedCategorySubject: Subject<number> = new Subject<number>();
+
+    categoriesBaseURL: string = "http://localhost:63286/";
+    getCategoriesURL: string = this.categoriesBaseURL +  "api/categories/get-all-categories";
+    getCategoryURL: string = this.categoriesBaseURL +  "api/categories/get-category-details/";
+
+    selectedCategoryChanged: Observable<number> = this.selectedCategorySubject.asObservable();
+
+    constructor(private http: Http){}
+
+    getCategories(): Observable<Array<CategoryListModel>>{
+
+        return this.http.get(this.getCategoriesURL)
+        .map(response => response.json() as Array<CategoryListModel>);
+    }
+
+    getCategory(id: number): Observable<CategoryModel>{
+
+        return this.http.get(this.getCategoryURL + id)
+        .map(response => response.json() as CategoryModel);
+    }
+
+    selectCategory(id: number){
+
+        this.selectedCategorySubject.next(id);
+    }
+}
+3. izmjeniti u app.module.ts:
+    //InMemoryWebApiModule.forRoot(InMemoryDataService),
+	
+  providers: [
+    { provide: I_CATEGORY_SERVICE, useClass: CategoryService },
+    { provide: I_PRODUCT_SERVICE, useClass: ProductMockService }
+  ],
+4. pokrenuti aplikaciju, primjetiti CORS error
+5. u web api projektu omogućiti cors umetanjematributa iznad controllera:
+[EnableCors("http://localhost:3000", "*", "*")]
+6. urediti nazivlje u modelu u web api projektu da se poklapa sa modelom u i dodati u WebApiConfig.cs:
+	config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+    config.Formatters.JsonFormatter.UseDataContractJsonSerializer = false;
+7. provjeriti aplikaciju, uočiti učitavanje kategorija
+8. kreirati product.service.ts i popuniti sa:
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Http } from "@angular/http";
+import 'rxjs/add/operator/map';
+
+import { ProductModel } from "../product/product.model";
+
+import { IProductService } from "./iproduct.service";
+
+@Injectable()
+export class ProductService implements IProductService {
+
+    getProductURL: string = 'http://localhost:63286/api/products/get-product-details/';
+
+    constructor(private http: Http) { }
+
+    getProduct(id: number): Observable<ProductModel> {
+
+        return this.http.get(this.getProductURL + id)
+            .map(response => response.json() as ProductModel);
+    }
+}
+10. dodati i izmjeniti app.module.ts:
+import { ProductService } from "./products/shared/product.service";
+
+  providers: [
+    { provide: I_CATEGORY_SERVICE, useClass: CategoryService },
+    { provide: I_PRODUCT_SERVICE, useClass: ProductService }
+  ],
+11. dodati u iproduct.service.ts:
+import { ProductSummaryModel } from "../product-summary/product-summary.model";
+
+    getBestSelling(): Observable<Array<ProductSummaryModel>>;
+12. dodati u product-mock.service.ts:
+import { ProductSummaryModel } from "../products/product-summary/product-summary.model";
+
+    getBestSelling(): Observable<Array<ProductSummaryModel>>{
+
+        throw Observable.throw(new Error("Not implemented."));
+    }
+13. dodati u product.service.ts:
+import { ProductSummaryModel } from "../product-summary/product-summary.model";
+
+	productsBaseURL = "http://localhost:63286/";
+    getProductURL: string = this.productsBaseURL + "api/products/get-product-details/";
+    getBestSellingURL: string = this.productsBaseURL + "api/products/get-bestselling"
+
+    getBestSelling(): Observable<Array<ProductSummaryModel>>{
+
+        return this.http.get(this.getBestSellingURL)
+            .map(response => response.json() as Array<ProductSummaryModel>);
+    }
+14. preurediti dashboard.component.html u:
+<div class="jumbotron">
+    <img src="assets/images/banner.png" class="img-responsive" />
+    <p>Dobrodošli u primjer webshopa razvijenog u Angularu.</p>
+</div>
+
+<div *ngFor="let product of topSellingProducts">
+    <div class="col-xs-12 col-lg-4">
+        <product-summary [productSummary]="product"></product-summary>
+    </div>
+</div>
+15. preurediti dashboard.component.ts u:
+import { Component, OnInit, Inject } from "@angular/core";
+
+import { ProductSummaryModel } from "../products/product-summary/product-summary.model";
+
+import { I_PRODUCT_SERVICE, IProductService } from "../products/shared/iproduct.service";
+
+@Component({
+	selector: 'dashboard',
+	templateUrl: './dashboard.component.html'
+})
+export class DashboardComponent {
+
+	topSellingProducts: Array<ProductSummaryModel>;
+
+	constructor( @Inject(I_PRODUCT_SERVICE) private productService: IProductService) { }
+
+	ngOnInit(): void {
+
+		this.productService.getBestSelling().subscribe(
+			value =>{
+				this.topSellingProducts = value;
+			},
+			error =>{
+				console.log(error);
+			}
+		)
+	}
+}

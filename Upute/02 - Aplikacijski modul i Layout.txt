@@ -1,0 +1,154 @@
+/*******************************************************************\
+2 - Aplikacijski modul i Layout
+\*******************************************************************/
+1. npm install bootstrap@3 --save
+2. index.html preurediti u:
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Angular Webshop</title>
+  <base href="/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <webshop-app>Loading AppComponent content here ...</webshop-app>
+</body>
+
+<script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+
+<script src="node_modules/core-js/client/shim.min.js"></script>
+<script src="node_modules/zone.js/dist/zone.js"></script>
+<script src="node_modules/systemjs/dist/system.src.js"></script>
+<script src="systemjs.config.js"></script>
+
+<script>
+  System.import('main.js').catch(function (err) { console.error(err); });
+</script>
+
+</html>
+3. preurediti app.component.ts u:
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'webshop-app',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent  { }
+4. kreirati assets folder pod src
+5. kreirati images folder pod assets
+6. dodati sliku (banner.png) u assets folder
+7. preuzeti template sa http://getbootstrap.com/examples/offcanvas/ i kopirati ga u app.component.html
+8. preurediti app.component.html u:
+<nav class="navbar navbar-fixed-top navbar-inverse">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+			 aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+			<a class="navbar-brand" href="#">Angular Webshop</a>
+		</div>
+		<div id="navbar" class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="#">Home</a></li>
+				<li><a href="#about">About</a></li>
+				<li><a href="#contact">Contact</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12 col-sm-3" id="sidebar">
+			<div class="list-group">
+				<a href="#" class="list-group-item active">Link</a>
+				<a href="#" class="list-group-item">Link</a>
+				<a href="#" class="list-group-item">Link</a>
+				<a href="#" class="list-group-item">Link</a>
+				<a href="#" class="list-group-item">Link</a>
+				<a href="#" class="list-group-item">Link</a>
+				<a href="#" class="list-group-item">Link</a>
+				<a href="#" class="list-group-item">Link</a>
+				<a href="#" class="list-group-item">Link</a>
+				<a href="#" class="list-group-item">Link</a>
+			</div>
+		</div>
+
+		<div class="col-xs-12 col-sm-9" id="content">
+			<div class="jumbotron">
+				<img src="assets/images/banner.png" class="img-responsive"/>
+				<p>This is an example to show the potential of an offcanvas layout pattern in Bootstrap. Try some responsive-range viewport
+					sizes to see it in action.</p>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-lg-4">
+					<h2>Heading</h2>
+					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
+						nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+						</p>
+					<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+				</div>
+				<div class="col-xs-12 col-lg-4">
+					<h2>Heading</h2>
+					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
+						nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+						</p>
+					<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+				</div>
+				<div class="col-xs-12 col-lg-4">
+					<h2>Heading</h2>
+					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
+						nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+						</p>
+					<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<hr>
+
+	<footer>
+		<p>&copy; 2016 Company, Inc.</p>
+	</footer>
+</div>
+9. kopirati u styles.css iz view-source http://getbootstrap.com/examples/offcanvas/offcanvas.css:
+html,
+body {
+  overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+body {
+  padding-top: 70px;
+}
+footer {
+  padding: 30px 0;
+}
+10. kreirati css folder pod assets folderom
+11. premjestiti styles.css u css folder
+12. promijeniti index.html:
+<link rel="stylesheet" href="assets/css/styles.css">
+13. pokrenuti aplikaciju i provjeriti konzolu (jquery error)
+14. kreirati js folder u assets folderu
+15. preuzeti jquery i staviti ga u js folder
+16. dodati u index.html prije bootstrap.js-a:
+<script src="assets/js/jquery-3.2.1.js"></script>
+17. ponovno provjeriti konzolu
+18. izdvojiti html u app.component.html datoteku
+19. postaviti templateURL u app.component.ts:
+templateUrl: './app.component.html'
+20. kreirati app.component.css i dodati:
+h2{
+    color: cornflowerblue;
+}
+21. u app.component.ts dodati:
+styleUrls: ['./app.component.css']

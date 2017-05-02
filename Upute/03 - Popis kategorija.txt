@@ -1,0 +1,82 @@
+/*******************************************************************\
+3 - Popis kategorija
+\*******************************************************************/
+1. kreitati folder categories unutar app foldera
+2. kreirati category-list folder unutar categories foldera
+3. kreirati datoteku category-list.component.ts unutar tog foldera i popuniti je sa:
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'category-list',
+  templateUrl: './category-list.component.html'
+})
+export class CategoryListComponent{
+    
+}
+4. u category-list.comonent.ts dodati:
+categoryList: Array<string> = [
+	"Rock",
+	"Punk",
+	"Pop",
+	"Techno",
+	"House",
+	"Klasična glazba",
+	"Ostalo"
+];
+5. kreirati datoteku category-list.component.html
+6. u category-list.comonent.html dodati:
+<a href="#" class="list-group-item" *ngFor="let category of categoryList">{{category}}</a>
+7. u app.component.html zamijeniti statične linkove u sidebaru sa:
+<category-list></category-list>
+8. pokrenuti/pogledati aplikaciju i pokazati konzolu sa erorom
+9. u app.module.ts dodati:
+import { CategoryListComponent }  from './categories/category-list/category-list.component';
+declarations: [ AppComponent, CategoryListComponent ],
+10. provjeriti aplikaciju i vidjeti da linkovi ne vode nikamo
+11. kreirati category-list.model.ts i popuniti sa:
+export class CategoryListModel{
+     id: number;
+     name: string;
+}
+12. dodati u category-list.component.ts:
+import { CategoryListModel } from "./category-list.model";
+13. zamijeniti category-list varijablu sa:
+categoryList: Array<CategoryListModel> = [
+        {id: 1, name: "Rock"},
+        {id: 2, name: "Punk"},
+        {id: 3, name: "Pop"},
+        {id: 4, name: "Techno"},
+        {id: 5, name: "House"},
+        {id: 6, name: "Klasična glazba"},
+        {id: 7, name: "Ostalo"}
+    ];
+14. promijeniti category-list.component.html na:
+<a [href]="category.id" class="list-group-item" *ngFor="let category of categoryList">{{category.name}}</a>
+15. pokazati da se url ne resolvea
+16. extensions -> debugger for chrome -> install -> reload
+17. otvoriti bs-config.json i preurediti u:
+{
+  "server": {
+    "baseDir": "src",
+    "routes": {
+      "/node_modules": "node_modules"
+    }
+  },
+    "open": false
+}
+18. Debug -> open configurations
+19. upisati:
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome against localhost",
+            "url": "http://localhost:3000",
+            "sourceMaps": true,
+            "webRoot": "${workspaceRoot}/src"
+        }
+    ]
+}
+20. testirati debugging

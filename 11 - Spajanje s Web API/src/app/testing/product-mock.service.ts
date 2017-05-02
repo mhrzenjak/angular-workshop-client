@@ -1,20 +1,28 @@
-// import { Injectable } from '@angular/core';
-// import { Observable } from 'rxjs/Observable';
-// import { Http } from '@angular/http';
-// import 'rxjs/add/operator/map';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
 
-// import { ProductModel } from "../products/product/product.model";
-// import { ProductService } from "../products/shared/product.service";
+import { ProductModel } from "../products/product/product.model";
+import { ProductSummaryModel } from "../products/product-summary/product-summary.model";
 
-// @Injectable()
-// export class ProductMockService implements ProductService {
+import { IProductService } from "../products/shared/iproduct.service";
 
-//     getProductURL: string = 'api/product/';
+@Injectable()
+export class ProductMockService implements IProductService {
 
-//     constructor(private http: Http){}
+    getProductURL: string = 'api/product/';
 
-//     getProduct(id: number): Observable<ProductModel>{
-//         return this.http.get(this.getProductURL + id)
-//         .map(response => response.json().data as ProductModel);
-//     }
-// }
+    constructor(private http: Http) { }
+
+    getProduct(id: number): Observable<ProductModel> {
+
+        return this.http.get(this.getProductURL + id)
+            .map(response => response.json().data as ProductModel);
+    }
+
+    getBestSelling(): Observable<Array<ProductSummaryModel>>{
+
+        throw Observable.throw(new Error("Not implemented."));
+    }
+}

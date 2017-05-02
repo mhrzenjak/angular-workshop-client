@@ -1,0 +1,25 @@
+/*******************************************************************\
+1 - Angular Seed
+\*******************************************************************/
+1. instalacija VS Code
+2. instalacija nodejs
+3. instalacija git for windows
+4. otvaranje command prompta i navigiranje u željeni folder
+5. git clone https://github.com/angular/quickstart.git quickstart
+6. cd quickstart
+7. npm install
+8. code .
+9. npm start
+10. otvoriti u browser
+11. ctrl + c (prekinuti server)
+12. File -> Preferences -> Settings
+Dodati:
+    "files.exclude": {
+        "node_modules/": true,
+        "**/.git": true,
+		"**/.DS_Store": true,
+		"**/*.js.map": true,
+		"**/*.js": {"when": "$(basename).ts"}
+    }
+13. Extensions -> icons -> install -> reload
+14. File -> Preferences -> File Icon Theme

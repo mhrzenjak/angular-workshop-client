@@ -1,36 +1,42 @@
 import { Injectable } from '@angular/core';
-import { Http } from "@angular/http";
+import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { Subject }    from 'rxjs/Subject';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 
 import { CategoryListModel } from "../category-list/category-list.model";
-import { ProductSummaryModel } from "../../products/product-summary/product-summary.model";
+import { CategoryModel } from "../category/category.model";
+
+import { ICategoryService } from "./icategory.service";
 
 @Injectable()
-export class CategoryService {
-    currentCategoryName: Subject<string> = new Subject<string>();
-    currentCategoryNameChanged: Observable<string> = this.currentCategoryName.asObservable();
+export class CategoryService implements ICategoryService {
+
+    private selectedCategorySubject: Subject<number> = new Subject<number>();
 
     categoriesBaseURL: string = "http://localhost:63286/";
     getCategoriesURL: string = this.categoriesBaseURL +  "api/categories/get-all-categories";
-    getCategoryURL: string = this.categoriesBaseURL +  "api/categories/get-products/";
+    getCategoryURL: string = this.categoriesBaseURL +  "api/categories/get-category-details/";
+
+    selectedCategoryChanged: Observable<number> = this.selectedCategorySubject.asObservable();
 
     constructor(private http: Http){}
 
     getCategories(): Observable<Array<CategoryListModel>>{
+
         return this.http.get(this.getCategoriesURL)
-        .map(response => response.json() as Array<CategoryListModel>);      
+        .map(response => response.json() as Array<CategoryListModel>);
     }
 
-    getCategory(id: number): Observable<Array<ProductSummaryModel>>{
+    getCategory(id: number): Observable<CategoryModel>{
+
         return this.http.get(this.getCategoryURL + id)
-        .map(response => response.json() as Array<ProductSummaryModel>);
+        .map(response => response.json() as CategoryModel);
     }
 
-    setCurrentCategoryName(name: string){
-        this.currentCategoryName.next(name);
+    selectCategory(id: number){
+
+        this.selectedCategorySubject.next(id);
     }
 }
