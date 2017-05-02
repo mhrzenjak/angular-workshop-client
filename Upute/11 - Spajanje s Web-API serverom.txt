@@ -82,25 +82,25 @@ export class ProductService implements IProductService {
             .map(response => response.json() as ProductModel);
     }
 }
-10. dodati i izmjeniti app.module.ts:
+9. dodati i izmjeniti app.module.ts:
 import { ProductService } from "./products/shared/product.service";
 
   providers: [
     { provide: I_CATEGORY_SERVICE, useClass: CategoryService },
     { provide: I_PRODUCT_SERVICE, useClass: ProductService }
   ],
-11. dodati u iproduct.service.ts:
+10. dodati u iproduct.service.ts:
 import { ProductSummaryModel } from "../product-summary/product-summary.model";
 
     getBestSelling(): Observable<Array<ProductSummaryModel>>;
-12. dodati u product-mock.service.ts:
+11. dodati u product-mock.service.ts:
 import { ProductSummaryModel } from "../products/product-summary/product-summary.model";
 
     getBestSelling(): Observable<Array<ProductSummaryModel>>{
 
         throw Observable.throw(new Error("Not implemented."));
     }
-13. dodati u product.service.ts:
+12. dodati u product.service.ts:
 import { ProductSummaryModel } from "../product-summary/product-summary.model";
 
 	productsBaseURL = "http://localhost:63286/";
@@ -112,7 +112,7 @@ import { ProductSummaryModel } from "../product-summary/product-summary.model";
         return this.http.get(this.getBestSellingURL)
             .map(response => response.json() as Array<ProductSummaryModel>);
     }
-14. preurediti dashboard.component.html u:
+13. preurediti dashboard.component.html u:
 <div class="jumbotron">
     <img src="assets/images/banner.png" class="img-responsive" />
     <p>Dobrodošli u primjer webshopa razvijenog u Angularu.</p>
@@ -123,7 +123,7 @@ import { ProductSummaryModel } from "../product-summary/product-summary.model";
         <product-summary [productSummary]="product"></product-summary>
     </div>
 </div>
-15. preurediti dashboard.component.ts u:
+14. preurediti dashboard.component.ts u:
 import { Component, OnInit, Inject } from "@angular/core";
 
 import { ProductSummaryModel } from "../products/product-summary/product-summary.model";
