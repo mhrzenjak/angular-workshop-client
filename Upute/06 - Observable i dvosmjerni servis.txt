@@ -102,7 +102,7 @@ export class CategoryComponent {
 4. dodati u category.service.ts:
 import { Subject } from 'rxjs/Subject';
 
-    selectedCategorySubject: Subject<number>;
+    selectedCategorySubject: Subject<number> = new Subject<number>();
 
     selectedCategoryChanged: Observable<number> = this.selectedCategorySubject.asObservable();
 	
