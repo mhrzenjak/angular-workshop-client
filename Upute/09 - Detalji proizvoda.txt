@@ -115,17 +115,17 @@ export interface IProductService {
 }
 
 export let I_PRODUCT_SERVICE = new InjectionToken<IProductService>('iproduct.service');
-12. kreirati product-mock.service.ts unutar testing foldera i popuniti sa:
+12. kreirati product.service.ts unutar shared foldera i popuniti sa:
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-import { ProductModel } from "../products/product/product.model";
-import { IProductService } from "../products/shared/iproduct.service";
+import { ProductModel } from "../product/product.model";
+import { IProductService } from "./iproduct.service";
 
 @Injectable()
-export class ProductMockService implements IProductService {
+export class ProductService implements IProductService {
 
     getProductURL: string = 'api/product/';
 
@@ -182,11 +182,11 @@ export class InMemoryDataService implements InMemoryDbService {
 14. dodati u app.module.ts:
 import { I_PRODUCT_SERVICE } from "./products/shared/iproduct.service";
 
-import { ProductMockService } from "./testing/product-mock.service";
+import { ProductService } from "./products/shared/product.service";
 
   providers: [
-    { provide: I_CATEGORY_SERVICE, useClass: CategoryMockService },
-    { provide: I_PRODUCT_SERVICE, useClass: ProductMockService }
+    { provide: I_CATEGORY_SERVICE, useClass: CategoryService },
+    { provide: I_PRODUCT_SERVICE, useClass: ProductService }
   ],
 15. preurediti product.component.ts u:
 import { Component, OnInit, Inject } from '@angular/core';
