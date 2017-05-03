@@ -9,9 +9,8 @@ import { CategoryListComponent } from './categories/category-list/category-list.
 import { CategoryComponent } from './categories/category/category.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
-import { CategoryService } from "./categories/shared/category.service";
 import { I_CATEGORY_SERVICE } from "./categories/shared/icategory.service";
-
+import { CategoryService } from "./categories/shared/category.service";
 import { InMemoryDataService } from './testing/in-memory-data.service';
 import { CategoryMockService } from "./testing/category-mock.service";
 
@@ -36,7 +35,7 @@ import { CategoryMockService } from "./testing/category-mock.service";
       }
     ])
   ],
-  providers: [ { provide: I_CATEGORY_SERVICE, useClass: CategoryMockService } ],
+  providers: [{ provide: I_CATEGORY_SERVICE, useClass: CategoryMockService }],
   declarations: [AppComponent, CategoryListComponent, CategoryComponent, DashboardComponent],
   bootstrap: [AppComponent]
 })

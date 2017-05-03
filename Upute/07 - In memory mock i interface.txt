@@ -2,20 +2,28 @@
 7 - In memory mock i interface
 \*******************************************************************/
 1. kreirati testing folder unutar app foldera
-2. kreirati category-mock.service.ts i popuniti sa:
+2. kreirati category-mock.service.ts i preseliti kod iz category.service.ts uz male promjene pathova:
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/of';
 
 import { CategoryListModel } from "../categories/category-list/category-list.model";
+
 import { CategoryModel } from "../categories/category/category.model";
 
-import { CategoryService } from "../categories/shared/category.service";
-
 @Injectable()
-export class CategoryMockService implements CategoryService {
+export class CategoryMockService {
 
-    categoryList: Array<CategoryListModel>;
+    categoryList: Array<CategoryListModel> = [
+        { id: 1, name: "Rock" },
+        { id: 2, name: "Punk" },
+        { id: 3, name: "Pop" },
+        { id: 4, name: "Techno" },
+        { id: 5, name: "House" },
+        { id: 6, name: "Klasična glazba" },
+        { id: 7, name: "Ostalo" }
+    ];
 
     selectedCategorySubject: Subject<number> = new Subject<number>();
 
@@ -62,24 +70,44 @@ export class InMemoryDataService implements InMemoryDbService {
         };
     }
 }
-4. izmijeniti category-mock.service.ts u:
+4. izmijeniti category.service.ts u:
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Http } from '@angular/http';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 
 import { CategoryListModel } from "../category-list/category-list.model";
-import { CategoryService } from "../category-list/category-list.service";
+
+import { CategoryModel } from "../category/category.model";
 
 @Injectable()
-export class CategoryMockService implements CategoryService {
+export class CategoryService {
+
     getCategoriesURL: string = 'api/categories';
+    getCategoryURL: string = 'api/category/';
+
+    selectedCategorySubject: Subject<number> = new Subject<number>();
+
+    selectedCategoryChanged: Observable<number> = this.selectedCategorySubject.asObservable();
 
     constructor(private http: Http){}
 
     getCategories(): Observable<Array<CategoryListModel>>{
         return this.http.get(this.getCategoriesURL)
         .map(response => response.json().data as Array<CategoryListModel>);
+    }
+
+    getCategory(id: number): Observable<CategoryModel>{
+
+        return this.http.get(this.getCategoryURL + id)
+        .map(response => response.json().data as CategoryModel);
+    }
+
+    selectCategory(id: number){
+
+        this.selectedCategorySubject.next(id);
     }
 }
 5. dodati u app.module.ts:
@@ -95,9 +123,9 @@ import { CategoryMockService } from "./testing/category-mock.service";
 	
   providers: [{ provide: CategoryService, useClass: CategoryMockService }],
 6. pokrenuti aplikaciju
-7. dodati u category.service.ts:
-    constructor(private http: Http){}
-8. primjetiti kako u category-mock.service.ts imamo problem s privatnim poljem
+7. promijeniti u app.module.ts:
+  providers: [{ provide: CategoryService, useClass: CategoryService }],
+8. primjetiti novi član u listi kategorija i sporiji odaziv
 9. kreirati icategory.service.ts u categories/shared folderu i popuniti sa:
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -115,33 +143,15 @@ export interface ICategoryService {
 
     selectCategory(id: number): void;
 }
-10. dodati u category.service.ts:
+10. dodati i promijeniti u category.service.ts:
 import { ICategoryService } from "./icategory.service";
 
 export class CategoryService implements ICategoryService {
-
-	private categoryList: Array<CategoryListModel> = [
-        { id: 1, name: "Rock" },
-        { id: 2, name: "Punk" },
-        { id: 3, name: "Pop" },
-        { id: 4, name: "Techno" },
-        { id: 5, name: "House" },
-        { id: 6, name: "Klasična glazba" },
-        { id: 7, name: "Ostalo" }
-    ];
-
-    private selectedCategorySubject: Subject<number> = new Subject<number>();
-11. promijeniti u category-mock.service.ts:
+11. dodati i promijeniti u category-mock.service.ts:
 import { ICategoryService } from "../categories/shared/icategory.service";
 
 export class CategoryMockService implements ICategoryService {
 
-obrisati: categoryList: Array<CategoryListModel>;
-
-    private selectedCategorySubject: Subject<number> = new Subject<number>();
-
-    private getCategoriesURL: string = 'api/categories';
-    private getCategoryURL: string = 'api/category/';
 12. dodati u app.module.ts:
 import { ICategoryService } from "./categories/shared/icategory.service";
 
@@ -171,5 +181,5 @@ import { ICategoryService, I_CATEGORY_SERVICE } from "../shared/icategory.servic
 
 	constructor(
 		private route: ActivatedRoute,
-		@Inject(I_CATEGORY_SERVICE) private categoryService: ICategoryService,
+		@Inject(I_CATEGORY_SERVICE) private categoryService: ICategoryService
 	) { }

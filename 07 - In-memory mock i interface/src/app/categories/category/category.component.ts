@@ -15,7 +15,7 @@ export class CategoryComponent {
 
 	constructor(
 		private route: ActivatedRoute,
-		@Inject(I_CATEGORY_SERVICE) private categoryService: ICategoryService,
+		@Inject(I_CATEGORY_SERVICE) private categoryService: ICategoryService
 	) { }
 
 	ngOnInit(): void {
@@ -35,12 +35,12 @@ export class CategoryComponent {
 		);
 	}
 
-	selectNextCategory(){
+	selectNextCategory() {
 
 		this.categoryService.selectCategory(this.category.id + 1);
 	}
 
-	selectPreviousCategory(){
+	selectPreviousCategory() {
 
 		this.categoryService.selectCategory(this.category.id - 1);
 	}
