@@ -10,9 +10,8 @@ import { CategoryComponent } from './categories/category/category.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProductSummaryComponent } from "./products/product-summary/product-summary.component";
 
-import { CategoryService } from "./categories/shared/category.service";
 import { I_CATEGORY_SERVICE } from "./categories/shared/icategory.service";
-
+import { CategoryService } from "./categories/shared/category.service";
 import { InMemoryDataService } from './testing/in-memory-data.service';
 import { CategoryMockService } from "./testing/category-mock.service";
 
@@ -37,7 +36,7 @@ import { CategoryMockService } from "./testing/category-mock.service";
       }
     ])
   ],
-  providers: [ { provide: I_CATEGORY_SERVICE, useClass: CategoryMockService } ],
+  providers: [{ provide: I_CATEGORY_SERVICE, useClass: CategoryService }],
   declarations: [AppComponent, CategoryListComponent, CategoryComponent, DashboardComponent, ProductSummaryComponent],
   bootstrap: [AppComponent]
 })

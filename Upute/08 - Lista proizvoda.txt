@@ -10,7 +10,7 @@ export class ProductSummaryModel{
      description: string;
      price: number;
 }
-4. kreairati product-summary.component.ts i popuniti sa:
+4. kreirati product-summary.component.ts i popuniti sa:
 import { Component, Input } from '@angular/core';
 
 import { ProductSummaryModel } from "./product-summary.model";
@@ -20,6 +20,7 @@ import { ProductSummaryModel } from "./product-summary.model";
   templateUrl: './product-summary.component.html'
 })
 export class ProductSummaryComponent{
+
     @Input() productSummary: ProductSummaryModel;
 }
 5. kreirati product-summary.component.html i preuzeti sa http://getbootstrap.com/components/#thumbnails-custom-content html:
@@ -155,13 +156,17 @@ export class InMemoryDataService implements InMemoryDbService {
 import { ProductSummaryComponent } from "./products/product-summary/product-summary.component";
 
   declarations: [AppComponent, CategoryListComponent, CategoryComponent, DashboardComponent, ProductSummaryComponent],
-14. pokrenuti aplikaciju
+14. pokrenuti aplikaciju (pripaziti da nismo ostavili injectan CategoryMockService, već CategoryService)
 15. kreirati category.component.css i popuniti sa:
 .btn {
     margin-bottom: 10px; 
 }
 16. dodati u category.component:
+@Component({
+	selector: 'category',
+	templateUrl: './category.component.html',
 	styleUrls: ['./category.component.css']
+})
 17. pokrenuti aplikaciju
 18. dodati u in-memory-data.service.ts:
         const productClassicalList: Array<ProductSummaryModel> = [
