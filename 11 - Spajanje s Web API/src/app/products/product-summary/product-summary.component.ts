@@ -16,6 +16,7 @@ export class ProductSummaryComponent {
   ) { }
 
   goToProductDetail(): void {
+    
     this.router.navigate(['/product', this.productSummary.id]);
   }
 }

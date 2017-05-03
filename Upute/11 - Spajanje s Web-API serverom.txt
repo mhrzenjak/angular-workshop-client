@@ -47,11 +47,6 @@ export class CategoryService implements ICategoryService {
 }
 3. izmjeniti u app.module.ts:
     //InMemoryWebApiModule.forRoot(InMemoryDataService),
-	
-  providers: [
-    { provide: I_CATEGORY_SERVICE, useClass: CategoryService },
-    { provide: I_PRODUCT_SERVICE, useClass: ProductMockService }
-  ],
 4. pokrenuti aplikaciju, primjetiti CORS error
 5. u web api projektu omogućiti cors umetanjematributa iznad controllera:
 [EnableCors("http://localhost:3000", "*", "*")]
@@ -59,48 +54,11 @@ export class CategoryService implements ICategoryService {
 	config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
     config.Formatters.JsonFormatter.UseDataContractJsonSerializer = false;
 7. provjeriti aplikaciju, uočiti učitavanje kategorija
-8. kreirati product.service.ts i popuniti sa:
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Http } from "@angular/http";
-import 'rxjs/add/operator/map';
-
-import { ProductModel } from "../product/product.model";
-
-import { IProductService } from "./iproduct.service";
-
-@Injectable()
-export class ProductService implements IProductService {
-
-    getProductURL: string = 'http://localhost:63286/api/products/get-product-details/';
-
-    constructor(private http: Http) { }
-
-    getProduct(id: number): Observable<ProductModel> {
-
-        return this.http.get(this.getProductURL + id)
-            .map(response => response.json() as ProductModel);
-    }
-}
-9. dodati i izmjeniti app.module.ts:
-import { ProductService } from "./products/shared/product.service";
-
-  providers: [
-    { provide: I_CATEGORY_SERVICE, useClass: CategoryService },
-    { provide: I_PRODUCT_SERVICE, useClass: ProductService }
-  ],
-10. dodati u iproduct.service.ts:
+9. dodati u iproduct.service.ts:
 import { ProductSummaryModel } from "../product-summary/product-summary.model";
 
     getBestSelling(): Observable<Array<ProductSummaryModel>>;
-11. dodati u product-mock.service.ts:
-import { ProductSummaryModel } from "../products/product-summary/product-summary.model";
-
-    getBestSelling(): Observable<Array<ProductSummaryModel>>{
-
-        throw Observable.throw(new Error("Not implemented."));
-    }
-12. dodati u product.service.ts:
+10. dodati u product.service.ts:
 import { ProductSummaryModel } from "../product-summary/product-summary.model";
 
 	productsBaseURL = "http://localhost:63286/";
@@ -152,3 +110,4 @@ export class DashboardComponent {
 		)
 	}
 }
+15. uskladiti modele između web-api servera i angular aplikacije
