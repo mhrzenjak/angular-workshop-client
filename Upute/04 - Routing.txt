@@ -161,11 +161,13 @@ import { ActivatedRoute, Params }   from '@angular/router';
 	}
 21. pokrenuti aplikaciju
 22. promijeniti u category.component.ts:
-ngOnInit(): void{
-	this.route.params.subscribe(
-		params => {
-			this.name = params["id"];
-		}
-	);
-}
+ngOnInit(): void {
+		this.category = new CategoryModel();
+		this.route.params.subscribe(
+			params => {
+				this.category.id = params["id"];
+				this.category.name = "Placeholder";
+			}
+		);
+	}
 23. pokrenuti aplikaciju
