@@ -3,11 +3,11 @@ import { Observable } from 'rxjs/Observable';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-import { ProductModel } from "../products/product/product.model";
-import { IProductService } from "../products/shared/iproduct.service";
+import { ProductModel } from "../product/product.model";
+import { IProductService } from "./iproduct.service";
 
 @Injectable()
-export class ProductMockService implements IProductService {
+export class ProductService implements IProductService {
 
     getProductURL: string = 'api/product/';
 

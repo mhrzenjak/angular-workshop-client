@@ -11,13 +11,12 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProductSummaryComponent } from "./products/product-summary/product-summary.component";
 import { ProductComponent } from "./products/product/product.component";
 
-import { CategoryService } from "./categories/shared/category.service";
 import { I_CATEGORY_SERVICE } from "./categories/shared/icategory.service";
-import { I_PRODUCT_SERVICE } from "./products/shared/iproduct.service";
-
-import { InMemoryDataService } from './testing/in-memory-data.service';
+import { CategoryService } from "./categories/shared/category.service";
 import { CategoryMockService } from "./testing/category-mock.service";
-import { ProductMockService } from "./testing/product-mock.service";
+import { I_PRODUCT_SERVICE } from "./products/shared/iproduct.service";
+import { ProductService } from "./products/shared/product.service";
+import { InMemoryDataService } from './testing/in-memory-data.service';
 
 import { RotateOnHoverDirective } from "./shared/rotate-on-hover/rotate-on-hover.directive";
 
@@ -47,8 +46,8 @@ import { RotateOnHoverDirective } from "./shared/rotate-on-hover/rotate-on-hover
     ])
   ],
   providers: [
-    { provide: I_CATEGORY_SERVICE, useClass: CategoryMockService },
-    { provide: I_PRODUCT_SERVICE, useClass: ProductMockService }
+    { provide: I_CATEGORY_SERVICE, useClass: CategoryService },
+    { provide: I_PRODUCT_SERVICE, useClass: ProductService }
   ],
   declarations: [
     AppComponent, CategoryListComponent, CategoryComponent, DashboardComponent, ProductSummaryComponent, ProductComponent,
