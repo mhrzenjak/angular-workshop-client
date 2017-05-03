@@ -86,6 +86,7 @@ import { ProductSummaryModel } from "./product-summary.model";
   templateUrl: './product-summary.component.html'
 })
 export class ProductSummaryComponent {
+
   @Input() productSummary: ProductSummaryModel;
 
   constructor(
@@ -93,14 +94,31 @@ export class ProductSummaryComponent {
   ) { }
 
   goToProductDetail(): void {
+  
     this.router.navigate(['/product', this.productSummary.id]);
   }
 }
-8. dodati u app.module.ts:
+8. promijeniti u app.module.ts:
+    RouterModule.forRoot([
+      {
+        path: 'dashboard',
+        component: DashboardComponent
+      },
+      {
+        path: 'category/:id',
+        component: CategoryComponent
+      },
       {
         path: 'product/:id',
         component: ProductComponent
+      },
+      {
+        path: '**',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
       }
+    ])
+  ],
 9. provjeriti rad aplikacije
 10. kreirati shared folder unutar products foldera
 11. kreirati iproduct.service.ts unutar shared foldera i popuniti sa:
@@ -109,12 +127,11 @@ import { Observable } from 'rxjs/Observable';
 
 import { ProductModel } from "../product/product.model";
 
+export let I_PRODUCT_SERVICE = new InjectionToken<IProductService>('iproduct.service');
 export interface IProductService {
 
     getProduct(id: number): Observable<ProductModel>;
 }
-
-export let I_PRODUCT_SERVICE = new InjectionToken<IProductService>('iproduct.service');
 12. kreirati product.service.ts unutar shared foldera i popuniti sa:
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
@@ -181,7 +198,6 @@ export class InMemoryDataService implements InMemoryDbService {
 }
 14. dodati u app.module.ts:
 import { I_PRODUCT_SERVICE } from "./products/shared/iproduct.service";
-
 import { ProductService } from "./products/shared/product.service";
 
   providers: [
