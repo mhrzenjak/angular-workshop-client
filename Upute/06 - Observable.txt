@@ -99,32 +99,7 @@ export class CategoryComponent {
 		);
 	}
 }
-4. dodati u category.service.ts:
-import { Subject } from 'rxjs/Subject';
-
-    selectedCategorySubject: Subject<number> = new Subject<number>();
-
-    selectedCategoryChanged: Observable<number> = this.selectedCategorySubject.asObservable();
-	
-	selectCategory(id: number){
-
-        this.selectedCategorySubject.next(id);
-    }
-5. dodati u category.component.ts:
-	selectNextCategory(){
-
-		this.categoryService.selectCategory(this.category.id + 1);
-	}
-
-	selectPreviousCategory(){
-
-		this.categoryService.selectCategory(this.category.id - 1);
-	}
-6. dodati u category.component.html:
-	<h1>{{category.id}} - {{category.name}}</h1>
-    <a class="btn btn-primary" (click)="selectPreviousCategory()">Prethodna kategorija</a>
-    <a class="btn btn-primary" (click)="selectNextCategory()">Sljedeća kategorija</a>
-7. izmjeniti category-list.component.ts u:
+4. izmjeniti category-list.component.ts u:
 import { Router } from "@angular/router";
 
     constructor(
@@ -141,27 +116,4 @@ import { Router } from "@angular/router";
             error => {
                 console.log(error);
             });
-
-        this.categoryService.selectedCategoryChanged.subscribe(
-            value => {
-                this.router.navigate(['/category', value]);
-            },
-            error => {
-                console.log(error);
-            });
     }
-8. pokrenuti aplikaciju i uočiti problem oko nepostojećih id-eva
-9. dodati u category-list.component.ts:
-	private doesCategoryExist(id: number): boolean {
-        return this.categoryList.find(x => x.id == id) !== undefined;
-    }
-	
-        this.categoryService.selectedCategoryChanged.subscribe(
-            value => {
-                if (this.doesCategoryExist(value)) {
-                    this.router.navigate(['/category', value]);
-                }
-            },
-            error => {
-                console.log(error);
-            });

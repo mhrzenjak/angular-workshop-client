@@ -21,7 +21,7 @@ export class CategoryComponent {
 	ngOnInit(): void {
 
 		this.category = new CategoryModel();
-
+		
 		this.route.params.subscribe(
 			params => {
 				this.categoryService.getCategory(params["id"]).subscribe(
@@ -33,15 +33,5 @@ export class CategoryComponent {
 					});
 			}
 		);
-	}
-
-	selectNextCategory(){
-
-		this.categoryService.selectCategory(this.category.id + 1);
-	}
-
-	selectPreviousCategory(){
-
-		this.categoryService.selectCategory(this.category.id - 1);
 	}
 }

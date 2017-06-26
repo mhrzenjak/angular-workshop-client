@@ -25,10 +25,6 @@ export class CategoryMockService {
         { id: 7, name: "Ostalo" }
     ];
 
-    selectedCategorySubject: Subject<number> = new Subject<number>();
-
-    selectedCategoryChanged: Observable<number> = this.selectedCategorySubject.asObservable();
-
     getCategories(): Observable<Array<CategoryListModel>>{
 
         return Observable.of(this.categoryList);
@@ -37,11 +33,6 @@ export class CategoryMockService {
     getCategory(id: number): Observable<CategoryModel>{
 
         return Observable.of(this.categoryList.find(x => x.id == id) as CategoryModel);
-    }
-
-    selectCategory(id: number){
-
-        this.selectedCategorySubject.next(id);
     }
 }
 3. kreirati in-memory-data.service.ts u testing folderu i popuniti sa:
@@ -88,10 +79,6 @@ export class CategoryService {
     getCategoriesURL: string = 'api/categories';
     getCategoryURL: string = 'api/category/';
 
-    selectedCategorySubject: Subject<number> = new Subject<number>();
-
-    selectedCategoryChanged: Observable<number> = this.selectedCategorySubject.asObservable();
-
     constructor(private http: Http){}
 
     getCategories(): Observable<Array<CategoryListModel>>{
@@ -103,11 +90,6 @@ export class CategoryService {
 
         return this.http.get(this.getCategoryURL + id)
         .map(response => response.json().data as CategoryModel);
-    }
-
-    selectCategory(id: number){
-
-        this.selectedCategorySubject.next(id);
     }
 }
 5. dodati u app.module.ts:
@@ -135,13 +117,9 @@ import { CategoryModel } from "../category/category.model";
 
 export interface ICategoryService {
 
-    selectedCategoryChanged: Observable<number>;
-
     getCategories(): Observable<Array<CategoryListModel>>;
 
     getCategory(id: number): Observable<CategoryModel>;
-
-    selectCategory(id: number): void;
 }
 10. dodati i promijeniti u category.service.ts:
 import { ICategoryService } from "./icategory.service";

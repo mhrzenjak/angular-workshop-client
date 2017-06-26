@@ -42,14 +42,4 @@ export class CategoryComponent {
 			}
 		);
 	}
-
-	selectNextCategory() {
-
-		this.categoryService.selectCategory(this.category.id + 1);
-	}
-
-	selectPreviousCategory() {
-
-		this.categoryService.selectCategory(this.category.id - 1);
-	}
 }

@@ -7,10 +7,8 @@ import { CategoryListModel } from "../categories/category-list/category-list.mod
 
 import { CategoryModel } from "../categories/category/category.model";
 
-import { ICategoryService } from "../categories/shared/icategory.service";
-
 @Injectable()
-export class CategoryMockService implements ICategoryService {
+export class CategoryMockService {
 
     categoryList: Array<CategoryListModel> = [
         { id: 1, name: "Rock" },
@@ -22,10 +20,6 @@ export class CategoryMockService implements ICategoryService {
         { id: 7, name: "Ostalo" }
     ];
 
-    selectedCategorySubject: Subject<number> = new Subject<number>();
-
-    selectedCategoryChanged: Observable<number> = this.selectedCategorySubject.asObservable();
-
     getCategories(): Observable<Array<CategoryListModel>>{
 
         return Observable.of(this.categoryList);
@@ -34,10 +28,5 @@ export class CategoryMockService implements ICategoryService {
     getCategory(id: number): Observable<CategoryModel>{
 
         return Observable.of(this.categoryList.find(x => x.id == id) as CategoryModel);
-    }
-
-    selectCategory(id: number){
-
-        this.selectedCategorySubject.next(id);
     }
 }

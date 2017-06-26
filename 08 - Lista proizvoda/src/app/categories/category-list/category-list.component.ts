@@ -31,15 +31,5 @@ export class CategoryListComponent {
             error => {
                 console.log(error);
             });
-
-        this.categoryService.selectedCategoryChanged.subscribe(
-            value => {
-                if (this.doesCategoryExist(value)) {
-                    this.router.navigate(['/category', value]);
-                }
-            },
-            error => {
-                console.log(error);
-            });
     }
 }

@@ -13,13 +13,9 @@ import { ICategoryService } from "./icategory.service";
 @Injectable()
 export class CategoryService implements ICategoryService {
 
-    private selectedCategorySubject: Subject<number> = new Subject<number>();
-
     categoriesBaseURL: string = "http://localhost:63286/";
     getCategoriesURL: string = this.categoriesBaseURL +  "api/categories/get-all-categories";
     getCategoryURL: string = this.categoriesBaseURL +  "api/categories/get-category-details/";
-
-    selectedCategoryChanged: Observable<number> = this.selectedCategorySubject.asObservable();
 
     constructor(private http: Http){}
 
@@ -33,10 +29,5 @@ export class CategoryService implements ICategoryService {
 
         return this.http.get(this.getCategoryURL + id)
         .map(response => response.json() as CategoryModel);
-    }
-
-    selectCategory(id: number){
-
-        this.selectedCategorySubject.next(id);
     }
 }

@@ -33,9 +33,4 @@ export class CategoryService implements ICategoryService {
         return this.http.get(this.getCategoryURL + id)
         .map(response => response.json().data as CategoryModel);
     }
-
-    selectCategory(id: number){
-
-        this.selectedCategorySubject.next(id);
-    }
 }

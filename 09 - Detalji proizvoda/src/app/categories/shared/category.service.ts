@@ -17,10 +17,6 @@ export class CategoryService implements ICategoryService {
     getCategoriesURL: string = 'api/categories';
     getCategoryURL: string = 'api/category/';
 
-    selectedCategorySubject: Subject<number> = new Subject<number>();
-
-    selectedCategoryChanged: Observable<number> = this.selectedCategorySubject.asObservable();
-
     constructor(private http: Http){}
 
     getCategories(): Observable<Array<CategoryListModel>>{
@@ -32,10 +28,5 @@ export class CategoryService implements ICategoryService {
 
         return this.http.get(this.getCategoryURL + id)
         .map(response => response.json().data as CategoryModel);
-    }
-
-    selectCategory(id: number){
-
-        this.selectedCategorySubject.next(id);
     }
 }

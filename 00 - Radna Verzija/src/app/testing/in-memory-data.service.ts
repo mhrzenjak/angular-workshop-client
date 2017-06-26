@@ -1,52 +1,25 @@
 import { InMemoryDbService } from 'angular-in-memory-web-api';
 
 import { CategoryListModel } from "../categories/category-list/category-list.model";
-import { ProductSummaryModel } from "../products/product-summary/product-summary.model";
-import { ProductModel } from "../products/product/product.model";
+import { CategoryModel } from "../categories/category/category.model";
 
 export class InMemoryDataService implements InMemoryDbService {
     createDb() {
+
         const categoryList: Array<CategoryListModel> = [
-            { id: 1, text: "Rock" },
-            { id: 2, text: "Punk" },
-            { id: 3, text: "Pop" },
-            { id: 4, text: "Techno" },
-            { id: 5, text: "House" },
-            { id: 6, text: "Klasična glazba" },
-            { id: 7, text: "Ostalo" },
-            { id: 8, text: "Najprodavanije" }
-        ];
-
-        const productRockList: Array<ProductSummaryModel> = [
-            { id: 1, name: "La Grange - ZZ Top", description: "Jedna od najpoznatijih ZZ Top pjesama. Svrstana u top 100 gitarskih pjesama svih vremena.", price: 4.25 },
-            { id: 2, name: "Comfortably numb - Pink Floyd", description: "Jedna od najpoznatijih Pink Floyd pjesama. Svrstana u top 500 pjesama svih vremena.", price: 3.76 },
-            { id: 3, name: "I'm Gonna Be (500 Miles) - The Proclaimers", description: "Izvorna keltska rock pjesma.", price: 4.44 },
-        ];
-
-        const productClassicalList: Array<ProductSummaryModel> = [
-            { id: 4, name: "Dance of the Knights - Prokofiev", description: "Klasik.", price: 1.23 },
-            { id: 5, name: "Claire de Lune - Claude Debussy", description: "Klasik.", price: 2.34 },
-            { id: 6, name: "O Fortuna - Carl Orff", description: "Klasik.", price: 3.34 },
-            { id: 7, name: "Ride of the Valkyries - Richard Wagner", description: "Klasik.", price: 3.44 },
-        ];
-
-        const productList: Array<ProductModel> = [
-            { id: 1, name: "La Grange - ZZ Top", description: "Jedna od najpoznatijih ZZ Top pjesama. Svrstana u top 100 gitarskih pjesama svih vremena.", price: 4.25, albumName: "Tres Hombres", duration: 231 },
-            { id: 2, name: "Comfortably numb - Pink Floyd", description: "Jedna od najpoznatijih Pink Floyd pjesama. Svrstana u top 500 pjesama svih vremena.", price: 3.76, albumName: "The Wall", duration: 383 },
-            { id: 3, name: "I'm Gonna Be (500 Miles) - The Proclaimers", description: "Izvorna keltska rock pjesma.", price: 4.44, albumName: "Sunshine on Leith", duration: 217 },
-            { id: 4, name: "Dance of the Knights - Prokofiev", description: "Klasik.", price: 1.23, albumName: "Top 100 Classics", duration: 347 },
-            { id: 5, name: "Claire de Lune - Claude Debussy", description: "Klasik.", price: 2.34, albumName: "Top 100 Classics", duration: 303 },
-            { id: 6, name: "O Fortuna - Carl Orff", description: "Klasik.", price: 3.34, albumName: "Top 100 Classics", duration: 322 },
-            { id: 7, name: "Ride of the Valkyries - Richard Wagner", description: "Klasik.", price: 3.44, albumName: "Top 100 Classics", duration: 301 },
+            { id: 1, name: "Rock" },
+            { id: 2, name: "Punk" },
+            { id: 3, name: "Pop" },
+            { id: 4, name: "Techno" },
+            { id: 5, name: "House" },
+            { id: 6, name: "Klasična glazba" },
+            { id: 7, name: "Ostalo" },
+            { id: 8, name: "Najprodavanije" }
         ];
 
         return {
             categories: categoryList,
-            category: [
-                { id: 1, productList: productRockList },
-                { id: 6, productList: productClassicalList },
-            ],
-            product: productList
+            category: categoryList as Array<CategoryModel>
         };
     }
 }

@@ -87,16 +87,6 @@ export class CategoryComponent {
 			}
 		);
 	}
-
-	selectNextCategory() {
-
-		this.categoryService.selectCategory(this.category.id + 1);
-	}
-
-	selectPreviousCategory() {
-
-		this.categoryService.selectCategory(this.category.id - 1);
-	}
 }
 10. category.model.ts promijeniti u:
 import { ProductSummaryModel } from "../../products/product-summary/product-summary.model";
@@ -143,8 +133,6 @@ export class InMemoryDataService implements InMemoryDbService {
 <div class="row">
     <div class="col-xs-12">
         <h1>{{category.id}} - {{category.name}}</h1>
-        <a class="btn btn-primary" (click)="selectPreviousCategory()">Prethodna kategorija</a>
-        <a class="btn btn-primary" (click)="selectNextCategory()">Sljedeća kategorija</a>
     </div>
 </div>
 <div class="row">
@@ -190,8 +178,6 @@ import { ProductSummaryComponent } from "./products/product-summary/product-summ
 18. preurediti category.component.html u:
 <div class="col-xs-12">
     <h1>{{category.id}} - {{category.name}}</h1>
-    <a class="btn btn-primary" (click)="selectPreviousCategory()">Prethodna kategorija</a>
-    <a class="btn btn-primary" (click)="selectNextCategory()">Sljedeća kategorija</a>
 </div>
 <div *ngFor="let product of category.productList; let i = index">
     <div class="col-xs-12 col-lg-4">
