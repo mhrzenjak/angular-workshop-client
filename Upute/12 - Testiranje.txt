@@ -73,3 +73,12 @@
             schemas: [NO_ERRORS_SCHEMA]
         })
 8. pokrenuti test
+9. dodati u product-summary.component.spec.ts:
+   it('should have expected price', () => {
+        comp.productSummary.price = 10;
+        fixture.detectChanges();
+        const priceElement = fixture.debugElement
+            .query(By.css(".test-class"))
+            .nativeElement;
+        expect(priceElement.innerText).toMatch("Cijena: 10 kn");
+    });
