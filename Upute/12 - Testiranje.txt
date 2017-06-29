@@ -22,7 +22,7 @@
 	
 	expect(h1.innerText).toMatch("Angular Webshop");
 4. kreirati product-summary.component.spec.ts datoteku unutar product-summary mape i u nju kopirati sadržaj iz app.component.spec.ts
-5. preuretidi category-list.component.spec.ts datoteku u:
+5. preurediti product-summary.component.spec.ts datoteku u:
 	import { ProductSummaryComponent } from './product-summary.component';
 	import { ProductSummaryModel } from "./product-summary.model";
 	import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -64,7 +64,7 @@
 		});
 	});
 6. uočiti error prilikom pokretanja testa
-7. dodati u category-list.component.spec.ts datoteku:
+7. dodati u product-summary.component.spec.ts datoteku:
 	import { RouterTestingModule } from '@angular/router/testing';
 
         TestBed.configureTestingModule({
